@@ -7,7 +7,28 @@
 </head>
 <body>
     
+    <div class="lucky-numbers">
+        <form id="lucky-number-form">
+            <input type="text" name="lucky-number" id="lucky-number">
+            <label for="lucky-number">Enter your lucky number:</label>
+            <button type="submit" id="btn-submit">Submit</button>
+        </form>
+        <ul id="lucky-number-ul"></ul>
+    </div>
+    <div class="list-numbers">
+        <form id="list-number-form">
+            <input type="text" name="list-number" id="list-number">
+            <label for="list-number">Enter list of numbers separated by a comma:</label>
+            <button type="submit" id="btn-submit">Submit</button>
+        </form>
+        <ul id="list-number-ul"></ul>
+    </div>
 
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.js"></script>
+
+    <!-- javascript -->
     <script src="/number-facts/number-facts-app.js"></script>
 </body>
 </html>
