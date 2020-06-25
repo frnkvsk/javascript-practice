@@ -1,0 +1,32 @@
+:root {
+    --display-width: 600px;
+    --button-width: 120px;
+}
+.display-canvas {
+    display: flex;
+    width: var(--display-width);
+    height: 500px; 
+    background: green;
+    z-index: 1;
+}
+
+button {
+    position: absolute;
+    top: 20px;
+    left: calc(600px / 2 - (120px / 2));
+    z-index: 2;
+    color: white;
+    background: black;
+    width: var(--button-width);
+    height: 60px;
+    border-radius: 10px;
+}
+button:hover {
+    background: rgb(71, 71, 71);
+    border-color: blue;
+    cursor: pointer;
+}
+button:active {
+    border: none;
+    border-style: none;
+}
