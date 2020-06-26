@@ -11,39 +11,44 @@ Build an HTML page that lets you draw cards from a deck. When the page loads, go
  */
 
 const BASE_URL = "https://deckofcardsapi.com/api/deck/";
-
+const BTN = document.querySelector("button");
 let deckId = 0;
 let rot = 0;
 let remaining = 52;
+let deck = [];
 
-const getCard = () => {
+async function getCard() {
     if(remaining) {
-        if(!deckId) {
-            url = `${BASE_URL}new/draw`
-        } else {
-            url = `${BASE_URL}${deckId}/draw/?count=1`
-        }
-        axios({
-            method: "get",
-            url: url
-    
-        }).then(response =>{
-            deckId = response.data.deck_id;
-            remaining = response.data.remaining;
-            if(rot < 180) rot += 30;
-            else rot = 30;
-            const display = document.querySelector(".display")
-            let img = new Image();
-            img.crossOrigin = "anonymous";
-            img.style.transform = `rotate(${rot}deg)`;
-            img.src = response.data.cards[0].image;
-            display.append(img);
-        }).catch(error => {
-            console.error(error);
-        });
-    }    
+        if(!deckId) url = `${BASE_URL}new/draw`
+        else url = `${BASE_URL}${deckId}/draw/?count=1`
+        
+        return await axios({method: "get", url: url});
+    }  
+    return 0;  
 }
-document.querySelector("button").addEventListener("click", getCard);
+async function buttonClickHandler() {
+
+    let response = await getCard();
+    
+    if(response) {
+        const display = document.querySelector(".display")
+        let img = new Image();
+        deckId = response.data.deck_id;
+        remaining = response.data.remaining;
+        if(rot < 180) rot += 30;
+        else rot = 30;          
+        img.crossOrigin = "anonymous";
+        img.style.transform = `rotate(${rot}deg)`;
+        img.src = response.data.cards[0].image;   
+        display.append(img);     
+    } else {
+        BTN.disabled = true;
+        BTN.innerText = "GAME OVER!";
+    }
+    
+}
+
+BTN.addEventListener("click", buttonClickHandler);
 
 
 
