@@ -30,12 +30,12 @@ const getCard = () => {
         }).then(response =>{
             deckId = response.data.deck_id;
             remaining = response.data.remaining;
-            if(this.rot < 180) this.rot += 30;
-            else this.rot = 30;
+            if(rot < 180) rot += 30;
+            else rot = 30;
             const display = document.querySelector(".display")
             let img = new Image();
             img.crossOrigin = "anonymous";
-            img.style.transform = `rotate(${this.rot}deg)`;
+            img.style.transform = `rotate(${rot}deg)`;
             img.src = response.data.cards[0].image;
             display.append(img);
         }).catch(error => {
