@@ -1,25 +1,34 @@
+const { read1 } = require("./step1");
 const axios = require("axios");
 const argv = process.argv;
 
-const read = path => {
-    return new Promise((resolve, reject) => {
-        axios({
-            method: "get",
-            url: path
-        }).then(response =>{
-            resolve(response.data);
+const read2 = path => {
+    if(!path.startsWith("--")) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: "get",
+                url: path
+            }).then(response =>{
+                resolve(response.data);
+            }).catch(err => {
+                reject(err);
+            });
         });
-    });
+    }
 }
 (async () => {
     if(argv[2].startsWith('http')) {
-        let text = await read(argv[2]);
-        if(text != undefined)
-            console.log(text);        
+        await read2(argv[2])
+        .then(resp => {
+            console.log(resp);
+        })
+        .catch(err => {
+            console.log(err);
+        });   
     } else {
-        require("./step1")
+        read1(argv[2]);
     }
 })();
-module.exports = {read: read};
+module.exports = {read2: read2};
 
 
