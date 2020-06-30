@@ -1,0 +1,19 @@
+{
+  "name": "express-routing-ex",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": ""
+  },
+  "keywords": [],
+  "author": "frank",
+  "license": "ISC",
+  "description": "express routing exercise",
+  "repository": {
+    "type": "git",
+    "url": "yes"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
