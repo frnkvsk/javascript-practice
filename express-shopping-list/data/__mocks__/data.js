@@ -1,22 +1,14 @@
-const fs = require("fs");
 
-const filePath = "./data/data.txt";
-
-const read = () => {  
-  fs.readFile(filePath, "utf8", (err, data) => {
-    if(err) console.err(err);
-    return JSON.parse(data);
-  });     
+const read = () => {
+  return {"items":[{"name":"hammer","price":19.99}]};     
 }
-
 const write = data => {
-  fs.writeFile(filePath, JSON.stringify(data), "utf8", err => {
-      if(err) console.error(err);
-  });
+  // do nothing
 }
 class DataStore {
   
   static async get(name=null) {
+    
     let data = await read();
     if(data) {
       if(name) {
@@ -26,7 +18,8 @@ class DataStore {
       return data;
     } else {
       return null;
-    }    
+    }
+    
   }
 
   static async post(item) {

@@ -16,13 +16,11 @@ router.get("/", async (req, res) => {
 // Here is what a sample request/response looks like:
 // {“name”:”popsicle”, “price”: 1.45} => {“added”: {“name”: “popsicle”, “price”: 1.45}}
 router.post("/items", async (req, res, next) => {
-  // console.log("dataStore => ",DataStore)
   try {
     if(!req.body.name) throw new ExpressError("Name is required", 400);
     if(!req.body.price) throw new ExpressError("Price is required", 400);
     const newItem = { name: req.body.name, price: req.body.price };
     await DataStore.post(newItem);
-    // items.push(newItem);
     return res.status(201).json( { "added": newItem } );
   } catch(e) {
     next(e);
@@ -34,13 +32,10 @@ router.post("/items", async (req, res, next) => {
 // Here is what a sample response looks like:
 // {“name”: “popsicle”, “price”: 1.45}
 router.get("/items/:name", async (req, res) => {
-  // const foundItem = items.find(item => item.name == req.params.name);
   const foundItem = await DataStore.get(req.params.name)
   if(foundItem == undefined) {
     throw new ExpressError("Item not found", 404);
   }
-  // res.json( { "name": foundItem.name, "price": foundItem.price } );
-  // console.log("router.get foundItem =>",foundItem)
   res.json(foundItem)
 });
 
@@ -49,13 +44,10 @@ router.get("/items/:name", async (req, res) => {
 // Here is what a sample request/response looks like:
 // {“name”:”new popsicle”, “price”: 2.45} => {“updated”: {“name”: “new popsicle”, “price”: 2.45}}
 router.patch("/items/:name", async (req, res) => {
-  // const patchSuccess = items.find(item => item.name == req.params.name);
-  
   const foundItem = await DataStore.patch(req.params.name, req.body.name, req.body.price)
   if(!foundItem) {
     throw new ExpressError("Item not found", 404);
   }
-  // [foundItem.name, foundItem.price] = [req.body.name, req.body.price];
   res.json({ "updated": foundItem });
 });
 
@@ -64,8 +56,6 @@ router.patch("/items/:name", async (req, res) => {
 // Here is what a sample response looks like:
 // {message: “Deleted”}
 router.delete("/items/:name", async (req, res) => {
-  // const foundItemIndex = items.findIndex(item => item.name == req.params.name);
-  // console.log("0router.delete => ",req.params.name)
   const foundItem = await DataStore.delete(req.params.name);
   console.log("1router.delete => ",foundItem)
   if(!foundItem) {
