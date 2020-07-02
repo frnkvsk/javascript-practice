@@ -1,0 +1,21 @@
+{
+  "name": "express-shopping-list",
+  "version": "1.0.0",
+  "description": "school practice exercise",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "yes"
+  },
+  "author": "frank",
+  "license": "ISC",
+  "devDependencies": {
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
