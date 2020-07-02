@@ -57,7 +57,6 @@ router.patch("/items/:name", async (req, res) => {
 // {message: “Deleted”}
 router.delete("/items/:name", async (req, res) => {
   const foundItem = await DataStore.delete(req.params.name);
-  console.log("1router.delete => ",foundItem)
   if(!foundItem) {
     throw new ExpressError("Item not found", 404);
   }
