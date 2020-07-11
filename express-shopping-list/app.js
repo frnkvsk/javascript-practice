@@ -3,6 +3,7 @@ const app = express();
 const itemRoutes = require("./routes/items/items");
 const ExpressError = require("./expressError");
 
+app.use(express.static("public"));
 app.use(express.json());
 app.use("/items", itemRoutes);
 
