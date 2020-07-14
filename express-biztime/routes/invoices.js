@@ -1,47 +1,54 @@
 const express = require("express");
 const router = new express.Router();
-
+const ExpressError = require("../expressError");
 const db = require("../db");
 
-// biztime=# select * from invoices;
-//  id | comp_code | amt | paid |  add_date  | paid_date
-// ----+-----------+-----+------+------------+------------
-//   1 | apple     | 100 | f    | 2020-07-13 |
-//   2 | apple     | 200 | f    | 2020-07-13 |
-//   3 | apple     | 300 | t    | 2020-07-13 | 2018-01-01
-//   4 | ibm       | 400 | f    | 2020-07-13 |
 // GET /invoices
 //   Return info on invoices: like {invoices: [{id, comp_code}, ...]}
-router.get("/invoices", async (req, res, next) => {
-  // try {
-
-  // } catch(err) {
-  //   return next(err);
-  // }
+router.get("/", async (req, res, next) => {
+  try {
+    const results = await db.query(`SELECT * FROM invoices`);
+    return res.json({"invoices": results.rows});
+  } catch(err) {
+    return next(err);
+  }
 });
 
 // GET /invoices/[id]
 //   Returns obj on given invoice.
 //   If invoice cannot be found, returns 404.
 //   Returns {invoice: {id, amt, paid, add_date, paid_date, company: {code, name, description}}}
-router.get("/invoices/:id", async (req, res, next) => {
-  // try {
+router.get("/:id", async (req, res, next) => {
+  try {
+    let id = req.params.id;
+    const results = await db.query(`SELECT * FROM invoices, companies
+                                    WHERE id=$1`,
+                                    [id]);
+    if(!results.rows.length) throw new ExpressError(`No such invoice: ${id}`, 404);
 
-  // } catch(err) {
-  //   return next(err);
-  // }
+    let row = results.rows[0];
+    return res.json({"invoice": {"id": row.id, "amt": row.id, "paid": row.paid, "add_date": row.add_date, "paid_date": row.paid_date}, "company": {"code": row.code, "name": row.code, "description": row.description}});
+  } catch(err) {
+    return next(err);
+  }
 });
 
 // POST /invoices
 //   Adds an invoice.
 //   Needs to be passed in JSON body of: {comp_code, amt}
 //   Returns: {invoice: {id, comp_code, amt, paid, add_date, paid_date}}
-router.post("/invoices", async (req, res, next) => {
-  // try {
-
-  // } catch(err) {
-  //   return next(err);
-  // }
+router.post("/", async (req, res, next) => {
+  try {
+    let {comp_code, amt} = req.body;
+    const results = await db.query(`INSERT INTO invoices
+                                    (comp_code, amt)
+                                    VALUES ($1, $2)
+                                    RETURNING *`,
+                                    [comp_code, amt]);
+    return res.json({"invoice": results.rows[0]});
+  } catch(err) {
+    return next(err);
+  }
 });
 
 // PUT /invoices/[id]
@@ -49,32 +56,37 @@ router.post("/invoices", async (req, res, next) => {
 //   If invoice cannot be found, returns a 404.
 //   Needs to be passed in a JSON body of {amt}
 //   Returns: {invoice: {id, comp_code, amt, paid, add_date, paid_date}}
-router.put("/invoices/:id", async (req, res, next) => {
-  // try {
-
-  // } catch(err) {
-  //   return next(err);
-  // }
+router.put("/:id", async (req, res, next) => {
+  try {
+    let id = req.params.id;
+    let {amt} = req.body;
+    const results = await db.query(`UPDATE invoices
+                                    SET amt=$1
+                                    RETURNING *`,
+                                    [amt]);
+    if(!results.rows.length) throw new ExpressError(`No such invoice: ${id}`, 404);
+    return res.json({"invoice": results.rows[0]});
+  } catch(err) {
+    return next(err);
+  }
 });
 
 // DELETE /invoices/[id]
 //   Deletes an invoice.
 //   If invoice cannot be found, returns a 404.
 //   Returns: {status: "deleted"}
-router.delete("/invoices/:id", async (req, res, next) => {
-  // try {
-
-  // } catch(err) {
-  //   return next(err);
-  // }
+router.delete("/:id", async (req, res, next) => {
+  try {
+    let id = req.params.id;
+    const results = await db.query(`DELETE FROM invoices
+                                    WHERE id=$1
+                                    RETURNING id`,
+                                    [id]);
+    if(!results.rows.length) throw new ExpressError(`No such invoice: ${id}`, 404);
+    return res.json({"status": "deleted"});
+  } catch(err) {
+    return next(err);
+  }
 });
-
-
-// Also, one route from the previous part should be updated:
-
-// GET /companies/[code]
-// Return obj of company: {company: {code, name, description, invoices: [id, ...]}}
-
-// If the company given cannot be found, this should return a 404 status response.
 
 module.exports = router;
