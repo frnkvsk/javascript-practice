@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "set NODE_ENV=test && jest ./tests --runInBand",
+    "server": "set NODE_ENV=development && nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "pg": "^8.3.0"
+    "pg": "^8.3.0",
+    "supertest": "^4.0.2"
   }
 }
