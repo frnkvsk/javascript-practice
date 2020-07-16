@@ -22,13 +22,15 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     let id = req.params.id;
-    const results = await db.query(`SELECT * FROM invoices, companies
-                                    WHERE id=$1`,
+    const results = await db.query(`SELECT * FROM invoices i, companies c
+                                    WHERE id=$1 AND i.comp_code = c.code`,
                                     [id]);
     if(!results.rows.length) throw new ExpressError(`No such invoice: ${id}`, 404);
 
     let row = results.rows[0];
-    return res.json({"invoice": {"id": row.id, "amt": row.id, "paid": row.paid, "add_date": row.add_date, "paid_date": row.paid_date}, "company": {"code": row.code, "name": row.code, "description": row.description}});
+    return res.json({"invoice": {"id": row.id, "amt": row.id, "paid": row.paid, "add_date": row.add_date, "paid_date": row.paid_date, 
+                      "company": {"code": row.code, "name": row.code, "description": row.description}
+                    }} );
   } catch(err) {
     return next(err);
   }
