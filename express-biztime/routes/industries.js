@@ -65,7 +65,7 @@ router.put("/:code", async (req, res, next) => {
                                     where code = $2
                                     RETURNING *`,
                                     [industry, code]);
-    if(!results.rows.length) throw new ExpressError(`No such industry: ${id}`, 404);
+    if(!results.rows.length) throw new ExpressError(`No such industry: ${code}`, 404);
     return res.json({"industry": results.rows[0]});
   } catch(err) {
     return next(err);
