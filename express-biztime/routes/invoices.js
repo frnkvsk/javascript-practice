@@ -2,6 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const ExpressError = require("../expressError");
 const db = require("../db");
+const slugify = require('slugify');
 
 // GET /invoices
 //   Return info on invoices: like {invoices: [{id, comp_code}, ...]}
@@ -44,7 +45,7 @@ router.post("/", async (req, res, next) => {
                                     (comp_code, amt)
                                     VALUES ($1, $2)
                                     RETURNING *`,
-                                    [comp_code, amt]);
+                                    [slugify(comp_code, "_"), amt]);
     return res.json({"invoice": results.rows[0]});
   } catch(err) {
     return next(err);
@@ -59,11 +60,16 @@ router.post("/", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   try {
     let id = req.params.id;
-    let {amt} = req.body;
+    let {amt, paid} = req.body;
+    let date_paid = null;
+    if(paid) {
+      date_paid = new Date();
+    }
     const results = await db.query(`UPDATE invoices
-                                    SET amt=$1
+                                    SET amt = $1, paid = $2, paid_date = $3
+                                    WHERE id = $4
                                     RETURNING *`,
-                                    [amt]);
+                                    [amt, paid, date_paid, id]);
     if(!results.rows.length) throw new ExpressError(`No such invoice: ${id}`, 404);
     return res.json({"invoice": results.rows[0]});
   } catch(err) {
