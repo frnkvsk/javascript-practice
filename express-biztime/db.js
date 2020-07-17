@@ -2,12 +2,20 @@
 
 const { Client } = require("pg");
 
-let DB_URI;
+// database username
+const databaseUserName = "";
 
+// database user password
+const databaseUserPassword = "";
+
+// port
+const port = "";
+
+let DB_URI = `postgres://${ databaseUserName }:${ databaseUserPassword }@localhost:${ port }/`;
 if (process.env.NODE_ENV === "test") {
-  DB_URI = `postgres://postgres:springboard@localhost:5432/biztime_test`;
+  DB_URI += "biztime_test";
 } else {
-  DB_URI = `postgres://postgres:springboard@localhost:5432/biztime`;
+  DB_URI += "biztime";
 }
 
 let db = new Client({
