@@ -2,7 +2,13 @@
 
 const pg = require("pg");
 
-const db = new pg.Client("postgresql:///lunchly");
+let db;
+if(process.env.NODE_ENV == "test") {
+  db = new pg.Client("postgres://postgres:springboard@localhost:5432/lunchly_test");
+} else {
+  db = new pg.Client("postgres://postgres:springboard@localhost:5432/lunchly");
+}
+ 
 
 db.connect();
 

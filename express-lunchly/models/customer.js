@@ -78,6 +78,41 @@ class Customer {
       );
     }
   }
+
+  /** return customer full name */
+
+  fullName() {
+    return this.firstName + " " + this.lastName;
+  }
+
+  /** return customer search results */
+
+  static async findByName(name) {
+    const customer = await db.query(
+      `SELECT id, 
+         first_name AS "firstName",  
+         last_name AS "lastName", 
+         phone, 
+         notes
+       FROM customers
+       WHERE UPPER(first_name) = UPPER($1) OR UPPER(last_name) = UPPER($1)
+       ORDER BY last_name, first_name`,
+       [name]
+    );
+    // const customer = await db.query(
+    //   `SELECT *
+    //    FROM customers
+    //    WHERE first_name = $1 OR last_name = $1`,
+    //    [name]
+    // );
+    if (customer === undefined) {
+      const err = new Error(`No such customer: ${name}`);
+      err.status = 404;
+      throw err;
+    }
+
+    return customer.rows.map(c => new Customer(c));
+  }
 }
 
 module.exports = Customer;
