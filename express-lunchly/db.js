@@ -2,13 +2,25 @@
 
 const pg = require("pg");
 
-let db;
-if(process.env.NODE_ENV == "test") {
-  db = new pg.Client("postgres://postgres:springboard@localhost:5432/lunchly_test");
+// database username
+const databaseUserName = "";
+
+// database user password
+const databaseUserPassword = "";
+
+// port
+const port = "5432";
+
+let DB_URI = `postgres://${ databaseUserName }:${ databaseUserPassword }@localhost:${ port }/`;
+if (process.env.NODE_ENV === "test") {
+  DB_URI += "lunchly_test";
 } else {
-  db = new pg.Client("postgres://postgres:springboard@localhost:5432/lunchly");
+  DB_URI += "lunchly";
 }
- 
+
+let db = new pg.Client({
+  connectionString: DB_URI
+});
 
 db.connect();
 
