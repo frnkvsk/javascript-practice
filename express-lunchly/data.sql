@@ -331,3 +331,6 @@ SELECT pg_catalog.setval('public.reservations_id_seq', 200, true);
 
 CREATE INDEX reservations_customer_id_idx ON public.reservations USING btree (customer_id);
 CREATE INDEX reservations_start_at_idx ON public.reservations USING btree (start_at);
+
+ALTER TABLE customers
+ADD middle_name text;

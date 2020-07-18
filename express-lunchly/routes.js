@@ -33,11 +33,12 @@ router.get("/add/", async function(req, res, next) {
 router.post("/add/", async function(req, res, next) {
   try {
     const firstName = req.body.firstName;
+    const middleName = req.body.middleName;
     const lastName = req.body.lastName;
     const phone = req.body.phone;
     const notes = req.body.notes;
 
-    const customer = new Customer({ firstName, lastName, phone, notes });
+    const customer = new Customer({ firstName, middleName, lastName, phone, notes });
     await customer.save();
 
     return res.redirect(`/${customer.id}/`);
@@ -45,6 +46,19 @@ router.post("/add/", async function(req, res, next) {
     return next(err);
   }
 });
+
+
+/** Handle search functionality for best 10 customers */
+
+router.get("/best/", async function(req, res, next) {
+  try {
+    const customers = await Customer.bestCustomers(10);
+    return res.render("customer_list_best.html", { customers });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 
 /** Show a customer, given their ID. */
 
@@ -78,6 +92,7 @@ router.post("/:id/edit/", async function(req, res, next) {
   try {
     const customer = await Customer.get(req.params.id);
     customer.firstName = req.body.firstName;
+    customer.middleName = req.body.middleName;
     customer.lastName = req.body.lastName;
     customer.phone = req.body.phone;
     customer.notes = req.body.notes;
@@ -114,14 +129,16 @@ router.post("/:id/add-reservation/", async function(req, res, next) {
 
 /** Handle search functionality for customers */
 
-router.post("/search", async function(req, res, next) {
+router.post("/search/", async function(req, res, next) {
   try {
     const searchTerm = req.body.search;
     const customers = await Customer.findByName(searchTerm);
-    return res.render("customer_list.html", { customers, searchTerm });
+    return res.render("customer_list.html", { customers });
   } catch (err) {
     return next(err);
   }
 });
+
+
 
 module.exports = router;

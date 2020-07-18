@@ -6,27 +6,42 @@ const Reservation = require("./reservation");
 /** Customer of the restaurant. */
 
 class Customer {
-  constructor({ id, firstName, lastName, phone, notes }) {
+  constructor({ id, firstName, middleName, lastName, phone, notes, lastReservation }) {
     this.id = id;
     this.firstName = firstName;
+    this.middleName = middleName;
     this.lastName = lastName;
     this.phone = phone;
     this.notes = notes;
+    this.lastReservation = lastReservation;
   }
 
   /** find all customers. */
 
   static async all() {
     const results = await db.query(
-      `SELECT id, 
-         first_name AS "firstName",  
-         last_name AS "lastName", 
-         phone, 
-         notes
-       FROM customers
-       ORDER BY last_name, first_name`
+      `SELECT c.id, 
+        first_name "firstName",  
+        middle_name "middleName",
+        last_name "lastName", 
+        phone, 
+        c.notes,
+        r.start_at "date",
+        r.num_guests "guests",
+        r.notes "rNotes"
+      FROM customers c
+      LEFT JOIN
+        (SELECT *
+        FROM reservations re
+        ORDER BY re.start_at
+        LIMIT 1) r ON c.id = r.customer_id
+      ORDER BY last_name, first_name;`
     );
-    return results.rows.map(c => new Customer(c));
+    return results.rows.map(c => {
+      return new Customer(c.id, c.firstName, c.middleName, c.lastName, c.phone, c.notes, 
+        {"lastResDate": c.date, "lastResGuests": c.guests, "lastResNotes": c.rNotes })
+  } );
+
   }
 
   /** get a customer by ID. */
@@ -34,8 +49,9 @@ class Customer {
   static async get(id) {
     const results = await db.query(
       `SELECT id, 
-         first_name AS "firstName",  
-         last_name AS "lastName", 
+         first_name "firstName",
+         middle_name "middleName",  
+         last_name "lastName", 
          phone, 
          notes 
         FROM customers WHERE id = $1`,
@@ -52,6 +68,21 @@ class Customer {
 
     return new Customer(customer);
   }
+  /** return customer full name */
+
+  get fullName() {
+    return this.middleName ? 
+      `${this.firstName} ${this.middleName} ${this.lastName}` : 
+      `${this.firstName} ${this.lastName}`;
+  }
+
+  /** return customer last reservation */
+
+  get last_Reservation() {
+    return this.lastReservation ? 
+      `${this.lastReservation.date} ${this.lastReservation.guests} ${this.lastReservation.rNotes}` : 
+      "";
+  }
 
   /** get all reservations for this customer. */
 
@@ -64,47 +95,38 @@ class Customer {
   async save() {
     if (this.id === undefined) {
       const result = await db.query(
-        `INSERT INTO customers (first_name, last_name, phone, notes)
-             VALUES ($1, $2, $3, $4)
+        `INSERT INTO customers (first_name, middle_name, last_name, phone, notes)
+             VALUES ($1, $2, $3, $4, $5)
              RETURNING id`,
-        [this.firstName, this.lastName, this.phone, this.notes]
+        [this.firstName, this.middleName, this.lastName, this.phone, this.notes]
       );
       this.id = result.rows[0].id;
     } else {
       await db.query(
-        `UPDATE customers SET first_name=$1, last_name=$2, phone=$3, notes=$4
-             WHERE id=$5`,
-        [this.firstName, this.lastName, this.phone, this.notes, this.id]
+        `UPDATE customers SET first_name=$1, middle_name=$2, last_name=$3, phone=$4, notes=$5
+             WHERE id=$6`,
+        [this.firstName, this.middleName, this.lastName, this.phone, this.notes, this.id]
       );
     }
-  }
-
-  /** return customer full name */
-
-  fullName() {
-    return this.firstName + " " + this.lastName;
   }
 
   /** return customer search results */
 
   static async findByName(name) {
+    
     const customer = await db.query(
       `SELECT id, 
-         first_name AS "firstName",  
-         last_name AS "lastName", 
+         first_name "firstName",  
+         middle_name "middleName",  
+         last_name "lastName", 
          phone, 
          notes
        FROM customers
-       WHERE UPPER(first_name) = UPPER($1) OR UPPER(last_name) = UPPER($1)
+       WHERE first_name ILIKE $1 OR last_name ILIKE $1
        ORDER BY last_name, first_name`,
-       [name]
+       [name = `%${name}%`]
     );
-    // const customer = await db.query(
-    //   `SELECT *
-    //    FROM customers
-    //    WHERE first_name = $1 OR last_name = $1`,
-    //    [name]
-    // );
+    
     if (customer === undefined) {
       const err = new Error(`No such customer: ${name}`);
       err.status = 404;
@@ -113,6 +135,34 @@ class Customer {
 
     return customer.rows.map(c => new Customer(c));
   }
+
+  static async bestCustomers(count) {
+    const customer = await db.query(
+      `SELECT c.id, 
+            first_name AS "firstName",  
+            middle_name AS "middleName",  
+            last_name AS "lastName", 
+            phone, 
+            c.notes, count(c.id)
+      FROM customers c, reservations r
+      WHERE c.id = r.customer_id
+      GROUP BY c.id
+      ORDER BY COUNT(c.id) DESC, last_name, first_name
+      LIMIT $1`,
+      [count]
+    );
+
+    if (customer === undefined) {
+      const err = new Error(`No customers found`);
+      err.status = 404;
+      throw err;
+    }
+  
+    return customer.rows.map(c => new Customer(c));
+
+  }
+
+  
 }
 
 module.exports = Customer;
