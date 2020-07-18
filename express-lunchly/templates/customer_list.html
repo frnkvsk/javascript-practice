@@ -8,7 +8,9 @@
 
 <ul style="column-count: 4">
   {% for customer in customers %}
-  <li><a href="/{{ customer.id }}/">{{ customer.fullName }}</a>{{ customer.last_Reservation }}</li>
+  <li class="d-inline-block"><a href="/{{ customer.id }}/">{{ customer.fullName }}</a> 
+    <p>{{ customer.last_Reservation }}</p>    
+  </li>
   {% endfor %}
 </ul>
 

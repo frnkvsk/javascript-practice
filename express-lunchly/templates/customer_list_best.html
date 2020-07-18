@@ -6,9 +6,11 @@
 
 <h1>Best Customers</h1>
 
-<ul style="column-count: 4">
+<ul style="column-count: 1">
   {% for customer in customers %}
-  <li><a href="/{{ customer.id }}/">{{ customer.fullName }}</a></li>
+  <li><a href="/{{ customer.id }}/">{{ customer.fullName }}</a> 
+    <p>{{ customer.last_Reservation }}</p>    
+  </li>
   {% endfor %}
 </ul>
 

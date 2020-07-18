@@ -1,6 +1,7 @@
 /** Customer for Lunchly */
 
 const db = require("../db");
+const moment = require("moment");
 const Reservation = require("./reservation");
 
 /** Customer of the restaurant. */
@@ -13,34 +14,44 @@ class Customer {
     this.lastName = lastName;
     this.phone = phone;
     this.notes = notes;
-    this.lastReservation = lastReservation;
+    this.lastReservation = lastReservation ? lastReservation : {"lastResDate": "", "lastResGuests": "", "lastResNotes": ""};
   }
-
+  
   /** find all customers. */
 
   static async all() {
     const results = await db.query(
-      `SELECT c.id, 
-        first_name "firstName",  
-        middle_name "middleName",
-        last_name "lastName", 
-        phone, 
-        c.notes,
-        r.start_at "date",
-        r.num_guests "guests",
-        r.notes "rNotes"
+      `SELECT
+            c.id, 
+            c.first_name "firstName",  
+            c.middle_name "middleName",
+            c.last_name "lastName", 
+            c.phone "phone", 
+            c.notes "notes",
+            r.start_at "date",
+            r.num_guests "guests",
+            r.notes "rNotes"
       FROM customers c
-      LEFT JOIN
-        (SELECT *
-        FROM reservations re
-        ORDER BY re.start_at
-        LIMIT 1) r ON c.id = r.customer_id
-      ORDER BY last_name, first_name;`
+      LEFT JOIN (
+            SELECT DISTINCT ON (customer_id) *
+            FROM reservations r
+            ORDER BY customer_id, start_at DESC
+      ) r 
+      ON r.customer_id = c.id
+      ORDER BY c.last_name, c.first_name;`
     );
-    return results.rows.map(c => {
-      return new Customer(c.id, c.firstName, c.middleName, c.lastName, c.phone, c.notes, 
-        {"lastResDate": c.date, "lastResGuests": c.guests, "lastResNotes": c.rNotes })
-  } );
+    
+    return results.rows.map(c => {     
+      return new Customer(
+        { id: c.id, firstName: c.firstName, middleName: c.middleName, lastName: c.lastName, phone: c.phone, notes: c.notes, 
+          lastReservation: {
+            "lastResDate": c.date ? `${c.date.getFullYear()}${(""+c.date.getMonth()).padStart(2,"0")}${(""+c.date.getDate()).padStart(2,"0")}` : "", 
+            "lastResGuests": c.guests ? c.guests : "", 
+            "lastResNotes": c.rNotes ? c.rNotes : "" 
+          }
+        }
+      )
+    });
 
   }
 
@@ -79,9 +90,11 @@ class Customer {
   /** return customer last reservation */
 
   get last_Reservation() {
-    return this.lastReservation ? 
-      `${this.lastReservation.date} ${this.lastReservation.guests} ${this.lastReservation.rNotes}` : 
+    console.log(this.lastReservation)
+    return this.lastReservation.lastResDate.length ? 
+      `${moment(this.lastReservation.lastResDate, "YYYYMMDD").fromNow()}, Guests: ${this.lastReservation.lastResGuests}, Notes: ${this.lastReservation.lastResNotes}` : 
       "";
+    // return this.lastReservation.lastResDate
   }
 
   /** get all reservations for this customer. */
@@ -134,21 +147,38 @@ class Customer {
     }
 
     return customer.rows.map(c => new Customer(c));
+    
   }
 
   static async bestCustomers(count) {
     const customer = await db.query(
-      `SELECT c.id, 
-            first_name AS "firstName",  
-            middle_name AS "middleName",  
-            last_name AS "lastName", 
-            phone, 
-            c.notes, count(c.id)
-      FROM customers c, reservations r
-      WHERE c.id = r.customer_id
-      GROUP BY c.id
-      ORDER BY COUNT(c.id) DESC, last_name, first_name
-      LIMIT $1`,
+
+      `SELECT * FROM
+      (SELECT
+           DISTINCT ON (r.customer_id)
+           r.start_at "date",
+           r.num_guests "guests",
+           r.notes "rNotes",
+           r.customer_id "c_id"
+         FROM reservations r
+         WHERE r.customer_id in (
+           SELECT customer_id
+           FROM reservations
+           GROUP BY customer_id
+           ORDER BY COUNT(customer_id)DESC
+           LIMIT $1
+         )
+      ) res
+      JOIN
+      (SELECT 
+        first_name AS "firstName",  
+        middle_name AS "middleName",  
+        last_name AS "lastName", 
+        phone, 
+        notes, 
+        id
+      FROM customers) cust
+      ON res.c_id = cust.id`,
       [count]
     );
 
@@ -156,10 +186,19 @@ class Customer {
       const err = new Error(`No customers found`);
       err.status = 404;
       throw err;
-    }
-  
-    return customer.rows.map(c => new Customer(c));
-
+    }  
+    
+    return customer.rows.map(c => {     
+      return new Customer(
+        { id: c.id, firstName: c.firstName, middleName: c.middleName, lastName: c.lastName, phone: c.phone, notes: c.notes, 
+          lastReservation: {
+            "lastResDate": c.date ? `${c.date.getFullYear()}${(""+c.date.getMonth()).padStart(2,"0")}${(""+c.date.getDate()).padStart(2,"0")}` : "", 
+            "lastResGuests": c.guests ? c.guests : "", 
+            "lastResNotes": c.rNotes ? c.rNotes : "" 
+          }
+        }
+      )
+    });
   }
 
   
