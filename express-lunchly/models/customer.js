@@ -14,7 +14,10 @@ class Customer {
     this.lastName = lastName;
     this.phone = phone;
     this.notes = notes;
-    this.lastReservation = lastReservation ? lastReservation : {"lastResDate": "", "lastResGuests": "", "lastResNotes": ""};
+    this.lastReservation = 
+      lastReservation ? 
+      lastReservation : 
+      {"lastResDate": "", "lastResGuests": "", "lastResNotes": ""};
   }
   
   /** find all customers. */
@@ -149,6 +152,8 @@ class Customer {
     return customer.rows.map(c => new Customer(c));
     
   }
+
+  /** return customer search results for most reservations */
 
   static async bestCustomers(count) {
     const customer = await db.query(
