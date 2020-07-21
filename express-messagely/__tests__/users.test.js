@@ -49,6 +49,7 @@ describe("Test User class", function () {
   });
 
   test("can get", async function () {
+    User.updateLoginTimestamp("test");
     let u = await User.get("test");
     expect(u).toEqual({
       username: "test",
@@ -105,22 +106,24 @@ describe("Test messages part of User class", function () {
 
   test('can get messages from user', async function () {
     let m = await User.messagesFrom("test1");
+    
     expect(m).toEqual([{
       id: expect.any(Number),
-      body: "u1-to-u2",
+      body: 'u1-to-u2',
       sent_at: expect.any(Date),
       read_at: null,
       to_user: {
-        username: "test2",
-        first_name: "Test2",
-        last_name: "Testy2",
-        phone: "+14155552222",
+        username: 'test2',
+        first_name: 'Test2',
+        last_name: 'Testy2',
+        phone: '+14155552222',
       }
     }]);
   });
 
   test('can get messages to user', async function () {
     let m = await User.messagesTo("test1");
+    console.log("m => ",m)
     expect(m).toEqual([{
       id: expect.any(Number),
       body: "u2-to-u1",
