@@ -22,15 +22,6 @@ let db = new pg.Client({
   connectionString: DB_URI
 });
 
-db.connect(
-  // function (err){
-  // if(err) {
-  //   console.log("-----------------------------")
-  //   console.log(err);
-  // }      
-  // else
-  //     console.log("Connected!\n"+DB_URI);
-// }
-);
+db.connect();
 
 module.exports = db;

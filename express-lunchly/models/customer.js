@@ -93,7 +93,7 @@ class Customer {
   /** return customer last reservation */
 
   get last_Reservation() {
-    console.log(this.lastReservation)
+    
     return this.lastReservation.lastResDate.length ? 
       `${moment(this.lastReservation.lastResDate, "YYYYMMDD").fromNow()}, Guests: ${this.lastReservation.lastResGuests}, Notes: ${this.lastReservation.lastResNotes}` : 
       "";
