@@ -1,6 +1,6 @@
 const express = require("express");
 const router = new express.Router();
-const { User } = require("../models/user");
+const User = require("../models/user");
 const { ensureCorrectUser, ensureLoggedIn } = require("../middleware/auth");
 
 /** GET / - get list of users.
@@ -47,6 +47,7 @@ router.get("/:username/to", ensureCorrectUser, async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
+    
 });
 
 /** GET /:username/from - get messages from user
