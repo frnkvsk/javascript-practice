@@ -1,11 +1,9 @@
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
 
-const app = require("./app");
-const db = require("./db");
-const User = require("./models/user");
-
-
+const app = require("../app");
+const db = require("../db");
+const User = require("../models/user");
 
 describe("Auth Routes Test", function () {
 
@@ -35,8 +33,8 @@ describe("Auth Routes Test", function () {
           last_name: "Smith",
           phone: "+14150000000"
         });
-
       let token = response.body.token;
+      
       expect(jwt.decode(token)).toEqual({
         username: "bob",
         iat: expect.any(Number)
@@ -73,6 +71,7 @@ describe("Auth Routes Test", function () {
       expect(response.statusCode).toEqual(400);
     });
   });
+
 });
 
 afterAll(async function () {

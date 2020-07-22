@@ -1,8 +1,8 @@
 /** User class for message.ly */
 const bcrypt = require("bcrypt");
-const { BCRYPT_WORK_FACTOR } = require("../config");
+const { BCRYPT_WORK_FACTOR, SECRET_KEY } = require("../config");
 const db = require("../db");
-
+const jwt = require("jsonwebtoken");
 /** User of the site. */
 
 class User {
@@ -19,6 +19,7 @@ class User {
       RETURNING username, password, first_name, last_name, phone`,
       [username, hashedPassword, first_name, last_name, phone]
     );
+    
     return resp.rows[0];
   }
 
@@ -119,4 +120,4 @@ class User {
 }
 
 
-module.exports = { User };
+module.exports = User;
