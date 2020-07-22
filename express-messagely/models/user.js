@@ -1,29 +1,17 @@
 /** User class for message.ly */
 const bcrypt = require("bcrypt");
-const {SECRET_KEY, BCRYPT_WORK_FACTOR} = require("../config");
-const { authenticateJWT, ensureCorrectUser, ensureLoggedIn } = require("../middleware/auth");
+const { BCRYPT_WORK_FACTOR } = require("../config");
 const db = require("../db");
 
 /** User of the site. */
 
 class User {
 
-  constructor({username, password, first_name, last_name, phone}) {
-    this.username = username;
-    this.password = password;
-    this.first_name = first_name;
-    this.last_name = last_name;
-    this.phone = phone;
-  }
   /** register new user -- returns
    *    {username, password, first_name, last_name, phone}
    */
 
   static async register({username, password, first_name, last_name, phone}) { 
-    const today = new Date().toISOString().slice(0, 10);
-    const timestamp = new Date(new Date().toUTCString().slice(0, -3));
-    const timestamp2 = new Date().toISOString();
-    const timestamp3 = ~~(+new Date() / 1000);
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     const resp = await db.query(
       `INSERT INTO users (username, password, first_name, last_name, phone, join_at)
@@ -131,4 +119,4 @@ class User {
 }
 
 
-module.exports = User;
+module.exports = { User };
