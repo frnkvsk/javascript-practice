@@ -2,6 +2,7 @@ const request = require("supertest");
 const app = require("../app");
 const db = require("../db");
 const Book = require("../models/book");
+process.env.NODE_ENV = "test";
 
 describe("test Book class", () => {
   const testBook1 = {
