@@ -34,7 +34,6 @@ router.get("/:id", async function (req, res, next) {
 router.post("/", async function (req, res, next) {
   try {
     const result = jsonschema.validate(req.body, bookSchema);
-    console.log("result => ",result.valid)
     if(result.valid) {
       const book = await Book.create(req.body);
       return res.status(201).json({ book });

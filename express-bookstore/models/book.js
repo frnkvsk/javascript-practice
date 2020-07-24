@@ -1,4 +1,5 @@
 const db = require("../db");
+const ExpressError = require("../expressError");
 
 
 /** Collection of related methods for books. */
@@ -94,6 +95,7 @@ class Book {
     );
 
     return result.rows[0];
+    
   }
 
   /** Update data with matching ID to data, return updated book.
@@ -154,6 +156,7 @@ class Book {
     if (result.rows.length === 0) {
       throw { message: `There is no book with an isbn '${isbn}`, status: 404 }
     }
+    return result.rows[0];
   }
 }
 

@@ -111,8 +111,6 @@ describe("test Book class", () => {
       expect(response.statusCode).toBe(200);
     });
 
-    
-
   });
 
 
