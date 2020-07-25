@@ -52,13 +52,28 @@ class Room {
     }
   }
 
-  /** send joke message to current user in room. */
+  /** send joke message to current user. */
 
   singlecast(data) {
-    console.log("singlecast ",data)
     for (let member of this.members) {
       if(member.name == data.name) {
-        console.log("Match ",member.name)
+        member.send(JSON.stringify(data));
+      }        
+    }
+  }
+
+  /** send member in room message to current user. */
+
+  membercast(data) {
+    let inRoom = "";
+    for (let member of this.members) {
+      if(member.name != data.name) {
+        inRoom += inRoom.length ? `, ${member.name}` : ` ${member.name}`;
+      }
+    }
+    data.text += "In room: " + inRoom;
+    for (let member of this.members) {
+      if(member.name == data.name) {
         member.send(JSON.stringify(data));
       }        
     }

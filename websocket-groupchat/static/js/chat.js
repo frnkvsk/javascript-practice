@@ -11,8 +11,6 @@ const name = prompt("Username?");
 /** called when connection opens, sends join info to server. */
 
 ws.onopen = function(evt) {
-  console.log("open", evt);
-
   let data = {type: "join", name: name};
   ws.send(JSON.stringify(data));
 };
@@ -21,19 +19,15 @@ ws.onopen = function(evt) {
 /** called when msg received from server; displays it. */
 
 ws.onmessage = function(evt) {
-  console.log("-------------")
-  console.log("message", evt);
 
   let msg = JSON.parse(evt.data);
   let item;
 
   if (msg.type === "note") {
-    console.log("note ",msg.text)
     item = $(`<li><i>${msg.text}</i></li>`);
   }
 
   else if (msg.type === "chat") {
-    console.log("chat ",msg.name, msg.text)
     item = $(`<li><b>${msg.name}: </b>${msg.text}</li>`);
   }
 
@@ -66,7 +60,6 @@ $('form').submit(function (evt) {
   // const msgText = $("#m").val();
   let data = {type: "chat", text: $("#m").val()};
    
-  console.log("form submit ",data)
   ws.send(JSON.stringify(data));
 
   $('#m').val('');

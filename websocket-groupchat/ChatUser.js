@@ -13,8 +13,6 @@ class ChatUser {
     this._send = send; // "send" function for this user
     this.room = Room.get(roomName); // room user will be in
     this.name = null; // becomes the username of the visitor
-
-    console.log(`created chat in ${this.room.name}`);
   }
 
   /** send msgs to this client using underlying connection-send-function */
@@ -42,7 +40,6 @@ class ChatUser {
   /** handle a chat: broadcast to room. */
 
   handleChat(text) {
-    console.log("handleChat")
     this.room.broadcast({
       name: this.name,
       type: 'chat',
@@ -50,29 +47,30 @@ class ChatUser {
     });
   }
 
-  /** handle a joke: DON't broadcast to room. */
+  /** handle a joke feature: DON't broadcast to room. */
 
   async handleJoke() {
-    console.log("0handlejoke")
     const config = {
       method: "get", 
       url: "https://icanhazdadjoke.com/", 
       headers: {"Accept": "application/json"}
     };
     let res = await axios(config);
-    console.log("/n/n ",res.data)
     this.room.singlecast({
       name: this.name,
       type: 'chat',
       text: res.data.joke
     });
-  
-    // console.log("2handleJoke joke",joke)
-    // this.room.broadcast({
-    //   name: this.name,
-    //   type: 'chat',
-    //   text: joke
-    // });
+  }
+
+  /** handle a member feature: DON't broadcast to room. */
+
+  async handleMembers() {
+    this.room.membercast({
+      name: this.name,
+      type: 'chat',
+      text: ""
+    });
   }
 
   /** Handle messages from client:
@@ -82,9 +80,9 @@ class ChatUser {
    */
 
   handleMessage(jsonData) {
-    console.log("handleMessage")
     let msg = JSON.parse(jsonData);
     if (msg.text === '/joke') this.handleJoke();
+    else if (msg.text === '/members') this.handleMembers();
     else if (msg.type === 'join') this.handleJoin(msg.name);
     else if (msg.type === 'chat') this.handleChat(msg.text);
     else throw new Error(`bad message: ${msg.type}`);
