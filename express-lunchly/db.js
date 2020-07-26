@@ -3,10 +3,10 @@
 const pg = require("pg");
 
 // database username
-const databaseUserName = "postgres";
+const databaseUserName = "your_database_username";
 
 // database user password
-const databaseUserPassword = "springboard";
+const databaseUserPassword = "your_database_password";
 
 // port
 const port = "5432";
