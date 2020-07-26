@@ -58,21 +58,48 @@ class ChatUser {
     let res = await axios(config);
     this.room.singlecast({
       name: this.name,
-      type: 'chat',
+      type: 'joke',
       text: res.data.joke
+    });
+  }
+
+  /** handle private message feature: DON't broadcast to room. */
+
+  handlePrivateMessage(text) {
+    let arr = text.split` `;
+    let msg = arr.slice(2).join` `;
+    // let [_, toUser, msg] = text.split` `;
+    this.room.privatecast({
+      name: this.name,
+      toUser: arr[1],
+      type: 'priv',
+      text: msg
     });
   }
 
   /** handle a member feature: DON't broadcast to room. */
 
-  async handleMembers() {
+  handleMembers() {
     this.room.membercast({
       name: this.name,
-      type: 'chat',
+      type: 'inRoom',
       text: ""
     });
   }
 
+  /** handle change name feature: broadcast new name to room. */
+
+  handleChangeName(text) {
+    const newName = text.split` `.slice(1).join` `;
+    let msg = `Attention: ${this.name} changed their name to ${newName}`;
+    this.name = newName;
+    this.room.broadcast({
+      name: newName,
+      type: 'chat',
+      text: msg
+    });
+  }
+  
   /** Handle messages from client:
    *
    * - {type: "join", name: username} : join
@@ -80,11 +107,14 @@ class ChatUser {
    */
 
   handleMessage(jsonData) {
-    let msg = JSON.parse(jsonData);
-    if (msg.text === '/joke') this.handleJoke();
+    let msg = JSON.parse(jsonData);    
+    if (msg.type === 'join') this.handleJoin(msg.name);
+    else if (msg.text === '/joke') this.handleJoke();
     else if (msg.text === '/members') this.handleMembers();
-    else if (msg.type === 'join') this.handleJoin(msg.name);
-    else if (msg.type === 'chat') this.handleChat(msg.text);
+    else if (msg.text.startsWith('/priv')) this.handlePrivateMessage(msg.text);
+    else if (msg.text.startsWith('/name')) this.handleChangeName(msg.text);
+    else if (msg.type === 'chat') this.handleChat(msg.text);    
+    
     else throw new Error(`bad message: ${msg.type}`);
   }
 

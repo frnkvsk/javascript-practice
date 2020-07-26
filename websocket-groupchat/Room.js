@@ -29,54 +29,49 @@ class Room {
 
   constructor(roomName) {
     this.name = roomName;
-    this.members = new Set();
+    this.members = {};
   }
 
   /** member joining a room. */
 
   join(member) {
-    this.members.add(member);
+    this.members[member.name] = member;
   }
 
   /** member leaving a room. */
 
   leave(member) {
-    this.members.delete(member);
+    delete this.members[member.name];
   }
 
   /** send message to all members in a room. */
 
   broadcast(data) {
-    for (let member of this.members) {
-      member.send(JSON.stringify(data));
+    for (let name in this.members) {
+      this.members[name].send(JSON.stringify(data));
     }
   }
 
   /** send joke message to current user. */
 
   singlecast(data) {
-    for (let member of this.members) {
-      if(member.name == data.name) {
-        member.send(JSON.stringify(data));
-      }        
-    }
+    this.members[data.name].send(JSON.stringify(data));
   }
 
   /** send member in room message to current user. */
 
   membercast(data) {
-    let inRoom = "";
-    for (let member of this.members) {
-      if(member.name != data.name) {
-        inRoom += inRoom.length ? `, ${member.name}` : ` ${member.name}`;
+    for (let name in this.members) {
+      if(name != data.name) {
+        data.text += data.text.length ? `, ${name}` : ` ${name}`;
       }
     }
-    data.text += "In room: " + inRoom;
-    for (let member of this.members) {
-      if(member.name == data.name) {
-        member.send(JSON.stringify(data));
-      }        
-    }
+    this.members[data.name].send(JSON.stringify(data));
+  }
+  /** send private message to another userr. */
+
+  privatecast(data) {
+    this.members[data.toUser].send(JSON.stringify(data));
   }
 }
 
