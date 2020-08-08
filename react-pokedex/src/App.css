@@ -1,0 +1,25 @@
+
+.App {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  width: 800px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  /* border: 1px solid black; */
+}
+
+.App-title {
+  text-align: center;
+  color: rgb(161, 159, 159);
+}
+.App-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 95%;
+  align-items: center;
+  justify-content: center;
+  /* border: 1px solid orange; */
+}
