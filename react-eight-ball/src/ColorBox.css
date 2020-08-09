@@ -1,0 +1,54 @@
+
+.ColorBox {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+}
+
+.ColorBox-ul {
+  display: flex;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 5;
+}
+
+.ColorBox-ul li {
+  width: 32px;
+  height: 30px;
+  border: .3px solid white;
+}
+
+.ColorBox-button {
+  width: 100px;
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: white;
+  background: rgb(61, 201, 103);
+  border-radius: 5px;
+  border-style: none;
+}
+
+.ColorBox-button:hover {
+  cursor: pointer;
+  background: rgb(32, 236, 93);
+}
+.red{background:red}
+.green{background:green}
+.blue{background:blue}
+.orange{background:orange}
+.cyan{background:cyan}
+.purple{background:purple}
+.yellow{background:yellow}
+.chartreuse{background:chartreuse}
+.aqua{background:aqua}
+.blueviolet{background:blueviolet}
+.cornflowerblue{background:cornflowerblue}
+.greenyellow{background:greenyellow}
+.gold{background:gold}
+.violet{background:violet}
+.skyblue{background:skyblue}
+.salmon{background:salmon}
