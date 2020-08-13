@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Cell from "./Cell";
-// import {fiveByFive} from "./data";
-import "./Board.css";
 import SetBoard from "./SetBoard";
+import GameOver from "./GameOver";
+import "./Board.css";
+
 /** Game board of Lights out.
  *
  * Properties:
@@ -28,30 +29,15 @@ import SetBoard from "./SetBoard";
  *
  **/
 
-function Board({ nrows, ncols, chanceLightStartsOn }) {
-  let newBoard = SetBoard();
-  setTimeout(() => {
-    console.log(newBoard)
-  }, 100);
-  
-  const [difficulty, setDifficulty] = useState(chanceLightStartsOn);
-  let [board, setBoard] = 
-    useState(
-      Array(nrows).fill(0).map(_ => 
-        Array(ncols).fill(0).map(_ => 
-          Math.random() < chanceLightStartsOn
-        )
-      )
-    );
+function Board({ chanceLightStartsOn }) {
+  let [level, setLevel] = useState(chanceLightStartsOn);
+  let [board, setBoard] = useState(SetBoard(level)[1]);
 
-  if(nrows !== board.length || chanceLightStartsOn !== difficulty) {
-    board = Array(nrows).fill(0).map(_ => 
-      Array(ncols).fill(0).map(_ => 
-        Math.random() < chanceLightStartsOn
-      )
-    );
-    setBoard(board);
-    setDifficulty(chanceLightStartsOn);
+  if(level !== chanceLightStartsOn) {
+    level = chanceLightStartsOn;
+    setLevel(level);      
+    board = SetBoard(level)[1]
+    setBoard(board.map(e => e.slice()).slice());
   }
 
   function flipCellsAround(coord) {
@@ -63,7 +49,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
       for(let [a,b] of [[0,0], [-1,0], [1,0], [0,-1], [0,1]]) {
         let r = y+a, c = x+b;
         if(r < 0 || c < 0) continue;
-        if(r === nrows || c === ncols) continue;
+        if(r === 5 || c === 5) continue;
         newBoard[r][c] = !newBoard[r][c];
       }
       
@@ -74,14 +60,14 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
   // if the game is won, just show a winning msg & render nothing else
   if(board.every(e => e.every(f => !f))) {
     return (
-      <h1>You win!!!</h1>
+      <GameOver />
     )
   }
 
   // make table board
   const tableBoard = 
-    Array(nrows).fill(0).map((_,i) => 
-      Array(ncols).fill(0).map((_,j) => 
+    Array(5).fill(0).map((_,i) => 
+      Array(5).fill(0).map((_,j) => 
         <Cell 
           key={`${i}-${j}`} 
           flipCellsAroundMe={() => flipCellsAround([i,j]) } 
@@ -94,7 +80,7 @@ function Board({ nrows, ncols, chanceLightStartsOn }) {
     <tbody>
       {tableBoard.map((row,i) => <tr key={i}>{row}</tr>)}
     </tbody>    
-  )
+  ) 
     
 }
 

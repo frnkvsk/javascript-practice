@@ -1,13 +1,9 @@
-import SolvePuzzle from "./SolvePuzzle";
 
-async function SetBoard(nrows, ncols, chanceLightStartsOn) {
-  let board = Array(nrows).fill(0).map(_ => 
-    Array(ncols).fill(0).map(_ => 
-      Math.random() < chanceLightStartsOn
-    )
-  );
-  const result = await SolvePuzzle(board.slice());
-  return result;
+import {easy, med, hard} from "./data";
+
+function SetBoard(level) {
+  let data = level === "easy" ? easy : level === "med" ? med : hard;
+  return data[Math.floor(Math.random() * data.length)];
 }
 
 export default SetBoard;

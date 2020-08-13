@@ -3,19 +3,21 @@ import Control from "./Control";
 import Board from "./Board";
 import "./App.css";
 
+
 /** Simple app that just shows the LightsOut game. */
 
 function App() {  
-  const [defaultProps, setProps] = useState([5, 5, 0.3]);
+  let [defaultProps, setProps] = useState("easy");
   const setDefaultProps = dp => {
-    setProps(dp.slice());
+    defaultProps = dp;
+    setProps(defaultProps);
   }
   
   return (
     <div>
       <Control setDefaultProps={setDefaultProps} />
       <table className="App">
-        <Board ncols={defaultProps[0]} nrows={defaultProps[1]} chanceLightStartsOn={defaultProps[2]}/>
+        <Board chanceLightStartsOn={defaultProps}/>
       </table>
     </div>
     
