@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital@1&display=swap');
+
+.Control {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 595px;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: .25rem;
+  background: lightgoldenrodyellow;
+  padding: 20px;
+}
+
+select, button {
+  height: 30px;
+  background: rgb(82, 194, 110);
+  color: white;
+  font-size: larger;
+  margin: 10px;
+}
+
+button {
+  border-radius: 10px;
+  border-style: none;
+}
+
+button:hover {
+  cursor: pointer;
+  background: rgb(5, 204, 55);
+}
