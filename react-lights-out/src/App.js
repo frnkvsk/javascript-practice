@@ -14,13 +14,10 @@ function App() {
   }
   
   return (
-    <div>
+    <div className="App">
       <Control setDefaultProps={setDefaultProps} />
-      <table className="App">
-        <Board chanceLightStartsOn={defaultProps}/>
-      </table>
+      <Board chanceLightStartsOn={defaultProps}/>
     </div>
-    
   );
 }
 

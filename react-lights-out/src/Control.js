@@ -4,7 +4,7 @@ import "./Control.css";
 function Control({ setDefaultProps }) {
   let [defaultProps, setProps] = useState("easy");
   const setDifficulty = level => {
-    defaultProps[2] = level;
+    defaultProps = level;
     setProps(defaultProps.slice());
   }
   return (

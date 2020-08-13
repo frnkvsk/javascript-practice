@@ -5,7 +5,7 @@ import "./GameOver.css";
 function GameOver() {
   return (
     <div className="GameOver">
-     <h1>Start a new game?</h1>
+     <h1>You Win!!!</h1>
     </div>
   )     
 }

@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="Control"
+  >
+    <div>
+      <label
+        for="difficulty"
+      >
+        Difficulty:
+      </label>
+      <select
+        id="difficulty"
+        name="difficulty"
+      >
+        <option
+          value="easy"
+        >
+          Easy
+        </option>
+        <option
+          value="med"
+        >
+          Medium
+        </option>
+        <option
+          value="hard"
+        >
+          Hard
+        </option>
+      </select>
+    </div>
+    <button
+      type="submit"
+    >
+      Set New Board
+    </button>
+  </div>
+</DocumentFragment>
+`;

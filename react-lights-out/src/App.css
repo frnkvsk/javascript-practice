@@ -1,4 +1,6 @@
 .App {
+  width: 500px;
   text-align: center;
   background: lightgoldenrodyellow;
+  border: 1px solid rgb(1, 153, 1, .1);
 }

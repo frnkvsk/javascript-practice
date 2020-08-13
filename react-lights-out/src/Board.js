@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import Cell from "./Cell";
 import SetBoard from "./SetBoard";
 import GameOver from "./GameOver";
-import "./Board.css";
 
 /** Game board of Lights out.
  *
  * Properties:
  *
- * - nrows: number of rows of board
- * - ncols: number of cols of board
- * - chanceLightStartsOn: float, chance any cell is lit at start of game
+ * - nrows: number of rows of board (not implemented on final submission)
+ * - ncols: number of cols of board (not implemented on final submission)
+ * - chanceLightStartsOn: float, chance any cell is lit at start of game (not implemented on final submission)
  *
  * State:
  *
@@ -29,7 +28,7 @@ import "./Board.css";
  *
  **/
 
-function Board({ chanceLightStartsOn }) {
+function Board({ nrows=5, ncols=5, chanceLightStartsOn="easy" }) {
   let [level, setLevel] = useState(chanceLightStartsOn);
   let [board, setBoard] = useState(SetBoard(level)[1]);
 
@@ -66,8 +65,8 @@ function Board({ chanceLightStartsOn }) {
 
   // make table board
   const tableBoard = 
-    Array(5).fill(0).map((_,i) => 
-      Array(5).fill(0).map((_,j) => 
+    Array(nrows).fill(0).map((_,i) => 
+      Array(ncols).fill(0).map((_,j) => 
         <Cell 
           key={`${i}-${j}`} 
           flipCellsAroundMe={() => flipCellsAround([i,j]) } 
@@ -77,9 +76,11 @@ function Board({ chanceLightStartsOn }) {
     );
 
   return (
-    <tbody>
-      {tableBoard.map((row,i) => <tr key={i}>{row}</tr>)}
-    </tbody>    
+    <table className="gameTable">
+      <tbody>
+        {tableBoard.map((row,i) => <tr id={`t-${i}`} key={`t-${i}`}>{row}</tr>)}
+      </tbody>      
+    </table>    
   ) 
     
 }
