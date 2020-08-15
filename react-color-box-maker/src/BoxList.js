@@ -5,9 +5,6 @@
 import React, {useState} from 'react';
 import ColorBox from './ColorBox';
 import { v4 as uuid } from 'uuid';
-// import './BoxList.css';
-// import NewBoxForm from './NewBoxForm';
-// import { styled } from '@material-ui/core/styles';
 
 import NewBoxForm from "./NewBoxForm";
 
@@ -18,7 +15,7 @@ function BoxList() {
     setBoxes(boxes.slice());
   }
   const hideBox = (id) => {
-    boxes = boxes.filter(e => e.id != id);
+    boxes = boxes.filter(e => e.id !== id);
     setBoxes(boxes.slice());
   }
 
@@ -33,7 +30,7 @@ function BoxList() {
           id={uid}
           backgroundColor={e.backgroundColor} 
           width={e.width} 
-          height={e.height} 
+          height={e.height}
           hideBox={hideBox} />
       }        
       )}

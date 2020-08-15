@@ -3,23 +3,12 @@
  */
 import React from "react";
 import BoxList from "./BoxList";
-
 import "./App.css";
 
-
-/** Simple app that just shows the LightsOut game. */
-
-function App() {  
-  // let [defaultProps, setProps] = useState("easy");
-  // const setDefaultProps = dp => {
-  //   defaultProps = dp;
-  //   setProps(defaultProps);
-  // }
-  
+function App() {    
   return (
     <div className="App">
-      <BoxList />
-      
+      <BoxList />      
     </div>
   );
 }

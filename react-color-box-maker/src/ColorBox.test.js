@@ -1,14 +1,14 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import ColorBox from './ColorBox';
 
 // smoke test
 it("Control renders without crashing", () => {
-  render(<App />);
+  render(<ColorBox />);
 });
 
 // snapshot test
 it("matches snapshot", function() {
-  const {asFragment} = render(<App />);
+  const {asFragment} = render(<ColorBox />);
   expect(asFragment()).toMatchSnapshot();
 });
