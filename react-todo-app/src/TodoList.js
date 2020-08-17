@@ -21,13 +21,13 @@ import Grid from '@material-ui/core/Grid';
 // import Typography from '@material-ui/core/Typography';
 // import FolderIcon from '@material-ui/icons/Folder';
 // import DeleteIcon from '@material-ui/icons/Delete';
+import FormDialog from './EditTodo';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: '100%',
     fontSize: '28px',
-    border: '1px solid blue',
   },
   todoForm: {
     flexGrow: 1,
@@ -38,121 +38,79 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     backgroundColor: '#e3f2fd',    
   },
-  todoText: {    
-    // border: '1px solid #afc2cb',
-    // multiline: 'true',
-  }
 }));
 
-function TodoList() {
-  let [todos, setTodo] = useState([]);
+const TodoList = () => {
+  
+  let [todos, setTodos] = useState(
+    JSON.parse(localStorage.getItem('todos')) || {}  
+  );
+  React.useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  let [editDialogVisible, setEditDialogVisible] = useState(false);
+  let [editDialogId, setEditDialogId] = useState("");
+  let [editDialogText, setEditDialogText] = useState("");
+
   const addNewTodo = newTodo => {
-    console.log('addnewtodo ',newTodo)
-    todos.push(newTodo);
-    setTodo(todos.slice());
+    todos[uuid()] = {todo: newTodo, completed: false};
+    setTodos(Object.assign({}, todos));
   }
-  // const editTodo = (id, newText) => {
-  //   console.log('hideTodo ',id)
-  //   todos = todos.map(e => {
-  //     // if(e.id === id) e. ? 
-  //   });
-  //   setTodo(todos.slice());
-  // }
-  const hideTodo = id => {
-    console.log('hideTodo ',id)
-    todos = todos.filter(e => e.id !== id);
-    setTodo(todos.slice());
+  const saveTodo = (todoId, newTodo) => {
+    todos[todoId] = {todo: newTodo, completed: false};
+    setTodos(Object.assign({}, todos));
+    setEditDialogVisible(false);
+  }
+  const completedTodo = (id) => {
+    todos[id].completed = !todos[id].completed;
+    setTodos(Object.assign({}, todos));
   }
 
+  const hideTodo = id => {
+    delete todos[id];
+    setTodos(Object.assign({}, todos));
+  }
+
+  const openEditTodo = (id) => {
+    setEditDialogText(todos[id].todo);
+    setEditDialogId(id);
+    setEditDialogVisible(true);
+  }  
+
   const classes = useStyles();
+
   return (
     <Grid className={classes.root} container direction="column" >
       <Grid item container>
-        <Grid item xs={0} md={2} />
+        <Grid item xs={"auto"} md={2} />
         <Grid item xs={12} md={8} >
           <NewTodoForm addNewTodo={addNewTodo} />
+
+          {(editDialogVisible) ? 
+            <FormDialog open={editDialogVisible} todoId={editDialogId} todoText={editDialogText} saveTodo={saveTodo}  /> : null
+          }
+          
           <List className={classes.todoText}>
-            {todos.map(e => {
-              const id = uuid();
-              e.id = id;
-              return <Todo 
-                      id={id}
-                      key={id} 
-                      todoText={e.addNewTodo}
-                      hideTodo={hideTodo} />
-              })} 
+            { 
+              Object.entries(todos).map(e => ( 
+                <Todo 
+                  id={e[0]}
+                  key={e[0]} 
+                  todoText={e[1].todo}
+                  completed={e[1].completed}
+                  completedTodo={completedTodo}
+                  openEditTodo={openEditTodo}
+                  hideTodo={hideTodo} />
+              ))
+            } 
           </List>
         </Grid>      
-        <Grid item xs={0} md={2} />
+        <Grid item xs={"auto"} md={2} />
       </Grid>      
     </Grid>
-    // <div className={classes.root}>
-    //   <Grid container spacing={2} xs={12}>
-    //     <Grid item container xs={12} md={8} className={classes.todoForm}>        
-    //       <NewTodoForm addNewTodo={addNewTodo} />
-    //     </Grid>
-    //     <Grid item container xs={12} md={8} className={classes.todo}>
-    //       <List>
-    //         {todos.map(e => {
-    //           const id = uuid();
-    //           e.id = id;
-    //           return <Todo 
-    //                     id={id}
-    //                     key={id} 
-    //                     todoText={e.addNewTodo}
-    //                     hideTodo={hideTodo}  
-    //                     className={classes.todoText}/>
-    //         })} 
-    //       </List>
-    //     </Grid>
-    //   </Grid>
-    // </div>
   )
 
-
-
-  // const useStyles = makeStyles((theme) => ({
-  //   container: {
-  //     display: 'flex',
-  //     flexDirection: 'column',
-  //     alignContent: 'center',
-  //     justifyContent: 'center',
-  //     width: '70%',
-  //     margin: '10px',
-  //     padding: '10px',
-  //     background: 'rgb(218, 238, 245)',
-  //     // border: '1px solid rgb(218, 238, 245)',
-  //   },
-  // }));
-  
-  // const classes = useStyles();
-  // let [boxes, setBoxes] = useState([]);
-  // const addNewTodo = newBox => {
-  //   boxes.push(newBox);
-  //   setBoxes(boxes.slice());
-  // }
-  // const hideBox = (id) => {
-  //   boxes = boxes.filter(e => e.id !== id);
-  //   setBoxes(boxes.slice());
-  // }
-
-  // return (
-  //   <div className={classes.container} >
-  //     <NewTodoForm addNewTodo={addNewTodo}/>
-  //     {boxes.map(e => {
-  //       const uid = uuid();
-  //       e.id = uid;
-  //       return <Todo 
-  //         key={uid}
-  //         id={uid}
-  //         backgroundColor={e.backgroundColor} 
-  //         width={e.width} 
-  //         height={e.height}
-  //         hideBox={hideBox} />
-  //     }        
-  //     )}
-  //   </div>
-  // );
 }
 
 export default TodoList;

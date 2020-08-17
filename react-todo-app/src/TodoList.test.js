@@ -1,14 +1,14 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import TodoList from './TodoList';
 
 // smoke test
 it("Control renders without crashing", () => {
-  render(<App />);
+  render(<TodoList />);
 });
 
 // snapshot test
-it("matches snapshot", function() {
-  const {asFragment} = render(<App />);
+it("matches snapshot", () => {
+  const {asFragment} = render(<TodoList />);
   expect(asFragment()).toMatchSnapshot();
 });

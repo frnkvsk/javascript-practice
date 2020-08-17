@@ -5,7 +5,6 @@ import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-// import "./NewBoxForm.css";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -24,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function NewTodoForm({addNewTodo}) {
+const NewTodoForm = ({addNewTodo}) => {
   const initialState = {
-    addNewTodo: "",
+    todo: "",
   }
   const [formData, setFormData] = useState(initialState)
   const handleChange = e => {
@@ -38,8 +37,8 @@ function NewTodoForm({addNewTodo}) {
   }
   const handleSubmit = e => {
     e.preventDefault();
-    if(formData.addNewTodo.length) {
-      addNewTodo(formData);
+    if(formData.todo.length) {
+      addNewTodo(formData.todo);
       setFormData(initialState);
     }    
   }
@@ -51,8 +50,8 @@ function NewTodoForm({addNewTodo}) {
         id="form-text-color" 
         label="Add a new todo"
         variant="outlined" 
-        name="addNewTodo"
-        value={formData.addNewTodo}
+        name="todo"
+        value={formData.todo}
         onChange={handleChange} />
       <Button type="submit" id="form-btn" variant="contained" color="primary" className={classes.button}>Add Todo</Button>
     </form>
