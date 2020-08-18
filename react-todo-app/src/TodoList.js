@@ -1,7 +1,7 @@
 /**
  TodoList - this component should render the NewTodoForm component and should render the list of Todo components. Place your state that contains all of the todos in this component.
  */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import FormDialog from './EditTodo';
@@ -31,7 +31,7 @@ const TodoList = () => {
   let [todos, setTodos] = useState(
     JSON.parse(localStorage.getItem('todos')) || {}  
   );
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
