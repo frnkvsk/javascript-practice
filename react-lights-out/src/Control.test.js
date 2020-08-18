@@ -8,7 +8,7 @@ it("Control renders without crashing", () => {
 });
 
 // snapshot test
-it("matches snapshot", function() {
+it("matches snapshot", () => {
   const {asFragment} = render(<Control />);
   expect(asFragment()).toMatchSnapshot();
 });

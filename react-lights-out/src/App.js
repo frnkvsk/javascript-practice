@@ -15,8 +15,10 @@ function App() {
   
   return (
     <div className="App">
+      
       <Control setDefaultProps={setDefaultProps} />
       <Board chanceLightStartsOn={defaultProps}/>
+      
     </div>
   );
 }

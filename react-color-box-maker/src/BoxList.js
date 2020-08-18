@@ -4,9 +4,8 @@
  */
 import React, {useState} from 'react';
 import ColorBox from './ColorBox';
-import { v4 as uuid } from 'uuid';
-
 import NewBoxForm from "./NewBoxForm";
+import { v4 as uuid } from 'uuid';
 
 function BoxList() {
   let [boxes, setBoxes] = useState([]);
