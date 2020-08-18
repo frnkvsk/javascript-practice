@@ -73,8 +73,12 @@ const TodoList = () => {
         <Grid item xs={12} md={8} >
           <NewTodoForm addNewTodo={addNewTodo} />
 
-          {(editDialogVisible) ? 
-            <FormDialog open={editDialogVisible} todoId={editDialogId} todoText={editDialogText} saveTodo={saveTodo}  /> : null
+          { editDialogVisible && 
+              <FormDialog 
+                open={editDialogVisible} 
+                todoId={editDialogId} 
+                todoText={editDialogText} 
+                saveTodo={saveTodo}  /> 
           }
           
           <List className={classes.todoText}>
@@ -88,7 +92,7 @@ const TodoList = () => {
                   completedTodo={completedTodo}
                   openEditTodo={openEditTodo}
                   hideTodo={hideTodo} />
-              ))
+              ));
             } 
           </List>
         </Grid>      
