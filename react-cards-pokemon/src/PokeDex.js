@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {useAxios, useLocalStorage} from "./hooks";
+import React from "react";
+import {useAxios} from "./hooks";
 import PokemonSelect from "./PokemonSelect";
 import PokemonCard from "./PokemonCard";
 import "./PokeDex.css";
@@ -20,22 +20,33 @@ function PokeDex() {
       )
     }  
   )
-  let [pokemon, setPokemon, removeCards] = useAxios("https://pokeapi.co/api/v2/pokemon/",func);
+  const [pokemon, setPokemon, removeCards] = useAxios("pokeDex", "https://pokeapi.co/api/v2/pokemon/",func);
   
-  const [state, setState] = useLocalStorage('pokemon');
+  // const [state, setState] = useLocalStorage('pokemon');
 
-  useEffect(() => {
-    pokemon = state;
-    setState(pokemon.slice());
-  }, [pokemon]);
+  // useEffect(() => {
+  //   effect
+  //   return () => {
+  //     cleanup
+  //   }
+  // }, [state])
+
+  const savePokemon = async (name) => {
+    await setPokemon(name);
+    // setState(pokemon.slice());
+  };
+  const removeAllPokemon = async () => {
+    await removeCards();
+    // setState({});
+  };
 
   return (
     <div className="PokeDex">
       <div className="PokeDex-buttons">
         <h3>Please select your pokemon:</h3>
-        <PokemonSelect add={setPokemon} />
+        <PokemonSelect add={savePokemon} />
         <div>
-        <button onClick={removeCards}>Remove all playing cards!</button>
+        <button onClick={removeAllPokemon}>Remove all playing cards!</button>
       </div>
       </div>
       <div className="PokeDex-card-area">

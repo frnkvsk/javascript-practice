@@ -7,7 +7,7 @@ import "./PlayingCardList.css";
  * Can also add a new card at random. */
 function CardTable() {
   const func = d => ({'image': d.cards[0].image});
-  const [cards, setCards, removeCards] = useAxios("https://deckofcardsapi.com/api/deck/new/draw/", func);
+  const [cards, setCards, removeCards] = useAxios("playingCard","https://deckofcardsapi.com/api/deck/new/draw/", func);
   return (
     <div className="PlayingCardList">
       <h3>Pick a card, any card!</h3>
