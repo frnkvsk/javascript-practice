@@ -2,7 +2,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 
-function ColorDisplay({state}) {
+function ColorDisplay({state={ name: 'red', value: 'red' }}) {
+  console.log('------state ',state)
   const {name, value} = state;
   const useStyles = makeStyles((theme) => ({
     root: {
