@@ -4,7 +4,6 @@ import Nav from './Nav';
 import DogList from './DogList';
 import DogDetails from './DogDetails';
 
-
 function App(props) {
   const [name, setName] = useState("");
   const clickHandler = name => {
@@ -13,13 +12,17 @@ function App(props) {
   return (
     <div className="App">
       <BrowserRouter>
-        <Nav props={props}/>
+        <Nav props={props} clickHandler={clickHandler}/> 
         <Switch>
           <Route exact path="/dogs" >
-            <DogList props={JSON.stringify(props)} clickHandler={clickHandler}/> 
+            <DogList props={props} clickHandler={clickHandler}/> 
           </Route>
-          <Route path="/dogs/:name" >
-            <DogDetails props={JSON.stringify(props.dogs.filter(e => e.name===name)[0])} /> 
+          <Route exact path="/dogs/:name" >
+            {
+              name ? 
+              <DogDetails props={props.dogs.filter(e => e.name===name)[0]} /> :
+              <Redirect to="/dogs" />
+            }
           </Route>
           <Redirect to="/dogs" />
         </Switch>

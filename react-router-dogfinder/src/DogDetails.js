@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {useHistory} from 'react-router-dom';
+import {v4 as uuid} from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,8 +17,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    margin: '25px'
+    margin: '25px',
   },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '50%',
+    margin: '25px',
+  }
 }));
 
 function DogDetails({props}) {
@@ -25,12 +34,12 @@ function DogDetails({props}) {
   const redirect = () => {
     history.push("/");
   }
-  const dog = JSON.parse(props);  
+  const dog = props;
   const classes = useStyles(); 
   
   return (
     <div className={classes.root} >
-    <Card>
+    <Card className={classes.card} >
       <CardActionArea>
         <CardMedia
           component="img"
@@ -45,8 +54,8 @@ function DogDetails({props}) {
           <Typography gutterBottom variant="h5" component="h2">
             Age: {dog.age}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-          {dog.facts.map(e => <div>{e}</div>)}
+          <Typography variant="body2" color="textSecondary" component="span">
+          {dog.facts.map(e => <p key={uuid()}>{e}</p>)}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -56,10 +65,8 @@ function DogDetails({props}) {
         </Button>
       </CardActions>
     </Card>
-    </div>
-    
-  );
-  
+    </div>    
+  );  
 }
 
 export default DogDetails;

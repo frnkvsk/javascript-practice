@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     width: '90%x',
     margin: '2px',
     border: '1px solid #ffcdd2',
+    cursor: 'pointer'
   },
   card: {
     display: 'flex',
@@ -49,7 +50,7 @@ function DogList({props, clickHandler}) {
     clickHandler(name);
   }
   const classes = useStyles(); 
-  const dogs = JSON.parse(props).dogs
+  const dogs = props.dogs
   return (
     <div className={classes.root}>
       <div className={classes.imageGallery}>

@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="App"
+  >
+    <div
+      class="makeStyles-root-8"
+    >
+      <a
+        class="makeStyles-link-9"
+        href="/"
+      >
+        Dog Home
+      </a>
+      <a
+        class="makeStyles-link-9"
+        href="/dogs/Whiskey"
+      >
+        Whiskey
+      </a>
+      <a
+        class="makeStyles-link-9"
+        href="/dogs/Duke"
+      >
+        Duke
+      </a>
+      <a
+        class="makeStyles-link-9"
+        href="/dogs/Perry"
+      >
+        Perry
+      </a>
+      <a
+        class="makeStyles-link-9"
+        href="/dogs/Tubby"
+      >
+        Tubby
+      </a>
+    </div>
+    <div
+      class="makeStyles-root-10"
+    >
+      <div
+        class="makeStyles-imageGallery-11"
+      >
+        <div
+          class="makeStyles-card-12"
+        >
+          <h3>
+            Name: Whiskey
+          </h3>
+          <img
+            alt="Whiskey"
+            class="makeStyles-image-13"
+            src="../images/whiskey.jpg"
+          />
+        </div>
+        <div
+          class="makeStyles-card-12"
+        >
+          <h3>
+            Name: Duke
+          </h3>
+          <img
+            alt="Duke"
+            class="makeStyles-image-13"
+            src="../images/duke.jpg"
+          />
+        </div>
+        <div
+          class="makeStyles-card-12"
+        >
+          <h3>
+            Name: Perry
+          </h3>
+          <img
+            alt="Perry"
+            class="makeStyles-image-13"
+            src="../images/perry.jpg"
+          />
+        </div>
+        <div
+          class="makeStyles-card-12"
+        >
+          <h3>
+            Name: Tubby
+          </h3>
+          <img
+            alt="Tubby"
+            class="makeStyles-image-13"
+            src="../images/tubby.jpg"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

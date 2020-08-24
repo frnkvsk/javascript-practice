@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-
+import { v4 as uuid } from 'uuid';
 const useStyles = makeStyles((theme) => ({  
   root: {
     display: 'flex',
@@ -25,16 +25,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function NavBar({props}) {
-  console.log(props)
+function NavBar({props, clickHandler}) {
   const classes = useStyles();
   return (
     <div className={classes.root}>  
-      <NavLink className={classes.link} exact to="/">
+
+      <NavLink key={uuid()} className={classes.link} exact to="/">
         Dog Home
       </NavLink>
       {props.dogs.map(e => (
-        <NavLink className={classes.link} exact to={`/dogs/${e.name}`}>
+        <NavLink 
+          key={uuid()} 
+          onClick={()=>clickHandler(e.name)} 
+          className={classes.link} 
+          exact to={`/dogs/${e.name}`} 
+        >
           {e.name}
         </NavLink>
       ))}    
