@@ -3,12 +3,14 @@ import axios from 'axios';
 import JokeCLS from './JokeCLS';
 import './JokeList.css';
 import {v4 as uuid} from 'uuid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class JokeListCLS extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      jokes: []
+      jokes: [],
+      loading: false
     }
     this.numJokesToGet = 10;
     this.getJokes = this.getJokes.bind(this);
@@ -18,16 +20,17 @@ class JokeListCLS extends React.Component {
   componentDidMount() {
     if (this.state.jokes.length === 0) this.getJokes();
   }
+  
   async getJokes() {
-    let j = [...this.state.jokes];
+    let j = [];
     let seenJokes = new Set();
     try {
+      this.setState({loading: true});
       while (j.length < this.numJokesToGet) {
         let res = await axios.get("https://icanhazdadjoke.com", {
           headers: { Accept: "application/json" }
         });
         let { status, ...jokeObj } = res.data;
-
         if (!seenJokes.has(jokeObj.id)) {
           seenJokes.add(jokeObj.id);
           j.push({ ...jokeObj, votes: 0 });
@@ -36,19 +39,20 @@ class JokeListCLS extends React.Component {
         }
       }
       this.setState((state, props) => ({
-        jokes: [...this.state.jokes, j]
+        loading: false,
+        jokes: [...state.jokes, j]
       }));
     } catch (e) {
       console.log(e);
     }
+    return false;
   }
   /* empty joke list and then call getJokes */
 
-  generateNewJokes() {
-    this.setState((state, props) => ({
-      jokes: []
-    }));
-    this.getJokes();
+  async generateNewJokes() {
+    this.setState({jokes: []});
+    const newLoading = await this.getJokes();
+    this.setState({loading: newLoading});
   }
 
   /* change vote for this id by delta (+1 or -1) */
@@ -60,7 +64,7 @@ class JokeListCLS extends React.Component {
 
   /* render: either loading spinner or list of sorted jokes. */
   render() {
-    if (this.state.jokes.length) {
+    if (!this.state.loading && this.state.jokes.length) {
       let sortedJokes = [...this.state.jokes[0]].sort((a, b) => b.votes - a.votes);
     
       return (
@@ -73,8 +77,10 @@ class JokeListCLS extends React.Component {
           ))}
         </div>
       );
+    } else {
+      return <CircularProgress />;
     }
-    return null;
+    
   }
 
 }
