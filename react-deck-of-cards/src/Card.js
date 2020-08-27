@@ -24,7 +24,7 @@ export default function MediaCard({rotation, src}) {
   
   return (
     <div className={classes.root}>
-      <img className={classes.media} src={src} />
+      <img className={classes.media} src={src} alt="" />
     </div>
   );
 }

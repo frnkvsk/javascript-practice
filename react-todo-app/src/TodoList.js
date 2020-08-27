@@ -92,7 +92,7 @@ const TodoList = () => {
                   completedTodo={completedTodo}
                   openEditTodo={openEditTodo}
                   hideTodo={hideTodo} />
-              ));
+              ))
             } 
           </List>
         </Grid>      

@@ -15,7 +15,7 @@ const BTN = document.querySelector("button");
 let deckId = 0;
 let rot = 0;
 let remaining = 52;
-let deck = [];
+// let deck = [];
 
 async function getCard() {
     if(remaining) {
