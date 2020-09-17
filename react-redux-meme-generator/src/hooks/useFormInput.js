@@ -6,10 +6,13 @@ function useFormInput(initialValue) {
   function handleChange(e) {
     setValue(e.target.value);
   }
-
+  function clear() {
+    setValue('')
+  }
   return {
     value,
     onChange: handleChange,
+    clear: clear,
   };
 }
 

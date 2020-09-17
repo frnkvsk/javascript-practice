@@ -1,22 +1,18 @@
-// import * as type from './types';
+import * as type from './types';
+import { v4 as uuid } from 'uuid';
 
-const initialState = [
-  {
-    img: 'https://images.unsplash.com/photo-1599908758979-25ba52737fb5',
-    top: 'top text',
-    bottom: 'bottom text',
+export default function memesReducer(state = [], action) {
+  switch (action.type) {
+    case type.GET_MEMES:
+      return [
+        {
+          id: uuid(),
+          img: action.payload.img,
+          top: action.payload.top,
+          bottom: action.payload.bottom,
+        }, ...state
+      ]
+    default:
+      return state;
   }
-];
-
-export default function memesReducer(state = initialState, action) {
-  // switch (action.type) {
-  //   case type.GET_MEMES:
-  //     return {
-  //       ...state,
-  //       memes: action.payload
-  //     }
-  //   default:
-  //     return state;
-  // }
-  return state;
 }
