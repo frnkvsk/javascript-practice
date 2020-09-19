@@ -3,8 +3,6 @@ import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
 import { useFormInput } from '../hooks/useFormInput';
-import { useUserInfo } from '../hooks/useUserInfo';
-import { v4 as uuid } from 'uuid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,32 +27,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NewMemeForm() {
+export default function EditMemeForm() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const image = useFormInput('');
   const topLabel = useFormInput('');
   const bottomLabel = useFormInput('');
-  const { userInfo, setUserInfoStorage } = useUserInfo();
   
   const handleSubmit = (e) => {
-    e.preventDefault();   
-    const id = uuid(); 
+    e.preventDefault();    
     dispatch({
       type: 'GET_MEMES',
       payload: {
-        id: id,
         img: image.value,
         top: topLabel.value,
         bottom: bottomLabel.value,
       },
     });
-    userInfo[id] = {
-      img: image.value,
-      top: topLabel.value,
-      bottom: bottomLabel.value,
-    };
-    setUserInfoStorage(userInfo);
     image.clear();
     topLabel.clear();
     bottomLabel.clear();

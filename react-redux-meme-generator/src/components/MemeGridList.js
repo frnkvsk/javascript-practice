@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 export default function MemeGridList() {
   const classes = useStyles();
   const memesData = useSelector(state => state.memes);
-
+  console.log('memeData',memesData)
   return (
     <div className={classes.root}>
       <Grid spacing={1} container className={classes.grid}>
