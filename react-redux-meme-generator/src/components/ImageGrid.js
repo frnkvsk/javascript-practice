@@ -158,7 +158,7 @@ export default function ImageGrid({img}) {
   // const [modalStyle] = React.useState(getModalStyle);
   // const [open, setOpen] = React.useState(false);
   const handleOpen = (e) => {
-    console.log('handleOpen',e.pageX, e.pageY, e.screenX, e.screenY)
+    // console.log('handleOpen',e.pageX, e.pageY, e.screenX, e.screenY)
     setTop('bottom')
     setBottom('top')
     if(hideForm.display === 'none') {
