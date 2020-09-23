@@ -1,10 +1,9 @@
-import React from 'react';
-import { Counter } from './features/counter/Counter';
+import React from "react";
+import TodoList from './TodoList';
+
 function App() {
   return (
-    <div className="App">
-      <Counter />
-    </div>
+    <TodoList />
   );
 }
 
