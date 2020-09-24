@@ -1,10 +1,11 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField } from '@material-ui/core';
-import { useFormInput } from '../hooks/useFormInput';
-import { useUserInfo } from '../hooks/useUserInfo';
+import { Box, Button, TextField } from '@material-ui/core';
+import { useFormInput } from '../../hooks/useFormInput';
+// import { useUserInfo } from '../../hooks/useUserInfo';
 import { v4 as uuid } from 'uuid';
+import { selectMemes, persistDataToLocalStorage, editMeme } from './memesSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,29 +33,21 @@ const useStyles = makeStyles((theme) => ({
 export default function NewMemeForm() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const image = useFormInput('');
-  const topLabel = useFormInput('');
-  const bottomLabel = useFormInput('');
-  const { userInfo, setUserInfoStorage } = useUserInfo();
+  let memes = useSelector(selectMemes);
+  const image = useFormInput(memes.editData.img);
+  const topLabel = useFormInput(memes.editData.top);
+  const bottomLabel = useFormInput(memes.editData.bottom);
+  // const { userInfo, setUserInfoStorage } = useUserInfo();
   
   const handleSubmit = (e) => {
-    e.preventDefault();   
-    const id = uuid(); 
-    dispatch({
-      type: 'GET_MEMES',
-      payload: {
-        id: id,
-        img: image.value,
-        top: topLabel.value,
-        bottom: bottomLabel.value,
-      },
-    });
-    userInfo[id] = {
-      img: image.value,
+    e.preventDefault();
+    const id = uuid();    
+    dispatch(editMeme({
+      id: id,
       top: topLabel.value,
       bottom: bottomLabel.value,
-    };
-    setUserInfoStorage(userInfo);
+    }))
+    dispatch(persistDataToLocalStorage());
     image.clear();
     topLabel.clear();
     bottomLabel.clear();
@@ -62,14 +55,17 @@ export default function NewMemeForm() {
 
   return (
     <div className={classes.root}>
-      <h2>Meme Generator</h2>
+      <h2>Edit Meme</h2>
+      <Box className={classes.root} onClick={handleSubmit}>
+        <div className={classes.labelTop}>
+          <label>{topLabel.value}</label>
+        </div>
+        <img className={classes.image} src={image.value} alt={topLabel.value} />
+        <div className={classes.labelBottom}>
+          <label>{bottomLabel.value}</label>
+        </div>      
+      </Box>
       <form className={classes.form} onSubmit={handleSubmit} noValidate autoComplete="off">
-        <TextField 
-          className={classes.formElements} 
-          label="URL" 
-          variant="outlined" 
-          value={image.value} 
-          onChange={image.onChange} />
         <TextField 
           className={classes.formElements} 
           label="Top Label" 

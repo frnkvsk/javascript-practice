@@ -2,7 +2,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
-import { useFormInput } from '../hooks/useFormInput';
+import { useFormInput } from '../../hooks/useFormInput';
+// import { useUserInfo } from '../../hooks/useUserInfo';
+import { v4 as uuid } from 'uuid';
+import { createMeme, persistDataToLocalStorage } from './memesSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,23 +30,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function EditMemeForm() {
+export default function NewMemeForm() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const image = useFormInput('');
   const topLabel = useFormInput('');
   const bottomLabel = useFormInput('');
+  // const { userInfo, setUserInfoStorage } = useUserInfo();
   
   const handleSubmit = (e) => {
-    e.preventDefault();    
-    dispatch({
-      type: 'GET_MEMES',
-      payload: {
-        img: image.value,
-        top: topLabel.value,
-        bottom: bottomLabel.value,
-      },
-    });
+    e.preventDefault();
+    const id = uuid();    
+    dispatch(createMeme({
+      id: id,
+      img: image.value,
+      top: topLabel.value,
+      bottom: bottomLabel.value,
+    }))
+    dispatch(persistDataToLocalStorage());
     image.clear();
     topLabel.clear();
     bottomLabel.clear();
