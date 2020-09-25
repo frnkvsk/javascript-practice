@@ -22,7 +22,7 @@ export const memesSlice = createSlice({
       });
     },
     editMeme: (state, action) => {
-      state.data =state.data.map(e => (
+      state.data = state.data.map(e => (
         e.id === action.payload.id ? {
           ...e,
           top: action.payload.top,
