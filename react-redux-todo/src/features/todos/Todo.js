@@ -15,18 +15,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import { Button, OutlinedInput } from '@material-ui/core';
-
-// import {
-//   complete,
-//   incomplete,
-//   edit,
-//   remove,
-//   selectTodo,
-// } from './todoSlice';
+import {
+  toggleTodo,
+  editTodo,
+  removeTodo,
+  selectTodos,
+  persistDataToLocalStorage,
+} from './todosSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // marginTop: '10px',
     position: 'relative',
     width: '100%',
     margin: '10px 0',
@@ -45,55 +43,62 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     width: '100%',
     heigth: '0',
-    // top: '0px',
     transform: 'translate(0px, -66px)',
     backgroundColor: '#eeeeeee8',
     fontSize: '26px',
     textAlign: 'center',
     color: 'white',
-    // padding: '15px 0',
     zIndex: 1,
   },
   formElements: {
     width: '500px',
     margin: '0 4px',
-    // fontSize: '16px',
     textAlign: 'center',
-    // color: 'white',
     zIndex: 1,
   },
 }));
 
 const Todo = ({id}) => {
   const classes = useStyles();
-  const todo = useSelector(state => state.todos.find(e => e.id === id));
+  const todos = useSelector(selectTodos);
+  const todo = todos.data.find(e => e.id === id);
   const dispatch = useDispatch();
   
   const [name, setName] = useState(todo.name);
   const [isEditVisible, setIsEditVisible] = useState({'display':'none'});
 
   const doneTodo = () => {
-    dispatch({ type: 'TOGGLETODO', id: id })
-    
+    dispatch(toggleTodo(
+      { 
+        id: id, 
+      }
+    )); 
+    dispatch(persistDataToLocalStorage());   
   }
-  const editTodo = e => {   
+  const handleEdit = e => {   
     e.preventDefault(); 
-    dispatch({ type: 'EDITTODO', id: id, name: name })
-    // setIsEditVisible({display: 'none'});
+    dispatch(editTodo(
+      { 
+        id: id, 
+        name: name 
+      }
+    ));
+    dispatch(persistDataToLocalStorage());
   }
-  const removeTodo = () => {
-    dispatch({ type: 'REMOVETODO', id: id })
-
+  const handleRemove = () => {
+    dispatch(removeTodo(
+      { 
+        id: id 
+      }
+    ));
+    dispatch(persistDataToLocalStorage());
   }
   const setEditVisible = () => {
-    // console.log('isEditVisible',isEditVisible.display)
     if(isEditVisible.display === 'none') {
       setIsEditVisible({});
-      // setIsEditVisible({display: 'box'});
     } else {
       setIsEditVisible({display: 'none'});
     }
-    // console.log('isEditVisible',isEditVisible)
   }
   const handleChange = e => {
     setName(e.target.value)
@@ -119,12 +124,12 @@ const Todo = ({id}) => {
           <IconButton edge="end" aria-label="edit" onClick={setEditVisible}>
             <EditIcon />
           </IconButton>
-          <IconButton edge="end" aria-label="delete" onClick={removeTodo}>
+          <IconButton edge="end" aria-label="delete" onClick={handleRemove}>
             <DeleteForeverIcon />
           </IconButton>
         </ListItemSecondaryAction>     
       </ListItem>
-      <form className={classes.form} style={isEditVisible} onSubmit={editTodo}>
+      <form className={classes.form} style={isEditVisible} onSubmit={handleEdit}>
         <OutlinedInput
           className={classes.formElements}
           placeholder={'Edit todo'}
@@ -135,10 +140,8 @@ const Todo = ({id}) => {
           Edit
         </Button>
       </form>
-    </>
-    
+    </>    
   )
-
 }
 
 export default Todo;
