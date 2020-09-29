@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectShoplyInventory } from './shoplyInventorySlice';
+import { selectShoplyInventory } from '../shoplyInventorySlice';
 // import { selectShoplyCart } from './shoplyCartSlice';
-import ShoplyItem from './ShoplyItem';
+import ListProduct from '../components/ListProduct';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -30,16 +30,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function ShoplyList() {
+export default function ProductsList() {
   const classes = useStyles();
   let products = useSelector(selectShoplyInventory);
 
   return (
     <div className={classes.root}>
+      <h1>Products</h1>
       <div className={classes.display}>
-        {console.log('ShoplyList products',products)}
+        {/* {console.log('ShoplyList products',products)} */}
         {products ? Object.keys(products).map(key => (
-          <ShoplyItem key={key} id={key} />
+          <ListProduct key={key} id={key} />
         )) : ''}
       </div>
     </div>

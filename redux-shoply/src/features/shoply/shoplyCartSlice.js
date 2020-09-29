@@ -1,39 +1,37 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const getData = () => {
-  const data = JSON.parse(localStorage.getItem('shoply_cart'));
-  return data ? Object.values(data) : [];
+  return JSON.parse(localStorage.getItem('shoply_cart')) || {}
 }
 
 export const shoplyCartSlice = createSlice({
   name: 'shoply_cart',
-  initialState: {
-    data: getData(),
-  },
+  initialState: getData(),
   reducers: {
     addCartItem: (state, action) => {
-      const index = state.data.findIndex(e => e.id === action.payload.id);
-      if(index > -1) {
-        state.data[index].quantity++;
+      if(state[action.payload.id]) {       
+        state[action.payload.id].quantity += action.payload.quantity;
       } else {
-        state.data.push({
+        state[action.payload.id] = {
           id: action.payload.id,
           name: action.payload.name,
           description: action.payload.description,
           image_url: action.payload.image_url,
           quantity: action.payload.quantity,
-        })
+          price: action.payload.price,
+        };
       }
+      
     },
     removeCartItem: (state, action) => {
-      const index = state.data.findIndex(e => e.id === action.payload.id);
-      if(index > -1) {
-        if(state.data[index].quantity === action.payload.quantity) {
-          state.data = state.data.filter(e => e.id !== action.payload.id);
+      if(state[action.payload.id]) {   
+        console.log('shoplyCartSlice removeCartItem ',state[action.payload.id].quantity , action.payload.quantity)     
+        if(state[action.payload.id].quantity > action.payload.quantity) {
+          state[action.payload.id].quantity -= action.payload.quantity;
         } else {
-          state.data[index].quantity = action.payload.quantity;
-        }
-      }
+          delete state[action.payload.id];
+        }        
+      } 
     },
     persistDataToLocalStorage: (state) => {
       localStorage.setItem("shoply_cart", JSON.stringify(state.data) || "");

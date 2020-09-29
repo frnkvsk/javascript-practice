@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles, Button } from '@material-ui/core';
+import { useHistory } from "react-router-dom";
+
 // import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { 
   addCartItem, 
-  removeCartItem,
-  persistDataToLocalStorage,
-  selectShoplyCart,
-} from './shoplyCartSlice'; 
+  // removeCartItem,
+  // persistDataToLocalStorage,
+  // selectShoplyCart,
+} from '../shoplyCartSlice'; 
 import { 
-  addInventoryItem, 
+  // addInventoryItem, 
   removeInventoryItem,
   selectShoplyInventory,
-} from './shoplyInventorySlice'; 
+} from '../shoplyInventorySlice'; 
 
 const useStyles = makeStyles((theme) => ({  
   root: {
@@ -96,27 +98,52 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export default function ShoplyItem({id}) {
-  console.log(useDispatch,addCartItem,removeCartItem,persistDataToLocalStorage,addInventoryItem,removeInventoryItem)
+export default function EachProduct({id}) {
+  // console.log(useDispatch,addCartItem,removeCartItem,persistDataToLocalStorage,addInventoryItem,removeInventoryItem)
   const classes = useStyles();
-  let item = {};
-  const cartItems = useSelector(selectShoplyCart);
-  const inventoryItems = useSelector(selectShoplyInventory);
-  if(cartItems[id]) {
-    item = cartItems[id];
-  } else if(inventoryItems[id]) {
-    item = inventoryItems[id];
-  }
-  item.id = id;
+  const dispatch = useDispatch();
+  const history = useHistory();
   
-  const handleAddItem = () => {
-    
-  }
-  const handleRemoveItem = () => {
+  let item = {};
+  // const cartItems = useSelector(selectShoplyCart);
+  const inventoryItems = useSelector(selectShoplyInventory);
+  // let amount = 1;
+  const [quantity, setQuantity] = useState(1);
+  // if(cartItems[id]) {
+  //   item = cartItems[id];
+  // } else if(inventoryItems[id]) {
+  item = inventoryItems[id];
+  // console.log('EachProduct item=',id, item)
+  // }
+  // item.id = id;
+  
+  const handleAddItem = (e) => {
+    e.preventDefault();
+    // change inventory quantity to account for adding item to cart
+    dispatch(removeInventoryItem({
+      id: id,
+      quantity: quantity,
+    }));
 
+    // add cart item
+    dispatch(addCartItem({      
+      ...item,
+      id: id,
+      quantity: quantity,
+    }));
+
+    setQuantity(1);
+    // redirect to cart page    
+    history.push(`/cart/${id}`);
   }
+
+  const handleQuantityChange = (e) => {
+    setQuantity(+e.target.value)
+  }
+  
   return (  
     <div className={classes.root}>
+      <h1>EachProduct</h1>
       <img className={classes.image} src={item.image_url} alt={item.name} />
       <div className={classes.descriptionWrapper}>
 
@@ -140,7 +167,9 @@ export default function ShoplyItem({id}) {
           type="number" 
           defaultValue="1" 
           min="1" 
-          max={item.quantity} />
+          max={item.quantity} 
+          onChange={handleQuantityChange}
+          />
         <Button 
           id="btnAdd" 
           className={classes.formElements} 
@@ -148,13 +177,13 @@ export default function ShoplyItem({id}) {
           variant="contained" 
           color="primary" 
           onClick={handleAddItem}>Add to Cart</Button>
-        <Button 
+        {/* <Button 
           id="btnRemove" 
           className={classes.formElements} 
           type="submit" 
           variant="contained" 
           color="default" 
-          onClick={handleRemoveItem}>Remove from Cart</Button>
+          onClick={handleRemoveItem}>Remove from Cart</Button> */}
       </form>     
     </div>    
   );

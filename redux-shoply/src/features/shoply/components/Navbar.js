@@ -1,10 +1,12 @@
 import React from 'react';
-import { makeStyles, fade } from '@material-ui/core/styles';
+import { useSelector } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-
+import { selectShoplyCart } from '../shoplyCartSlice';
 import cart from './cart-mini4.svg';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,11 +37,11 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       border: '1px solid rgba(0,0,0,0.3)'
     },
-    '&$focused': {
-      // backgroundColor: '#fff',
-      boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-      borderColor: theme.palette.primary.main,
-    },
+    // '&$focused': {
+    //   // backgroundColor: '#fff',
+    //   boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
+    //   borderColor: theme.palette.primary.main,
+    // },
 
     // border: 'none',
     // "&:hover": {
@@ -78,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
   const classes = useStyles();
-  // const cartItems = useSelector(selectShoplyCart);
+  const cartItems = useSelector(selectShoplyCart);
   // const auth = useContext(AuthContext);
   // const handleClick = () => {
   //   auth.setAuthState({
@@ -86,18 +88,18 @@ export default function Navbar() {
   //     userInfo: {}
   //   });
   // }
-
+  // console.log('Navbar cartItems',cartItems)
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h5" className={classes.title}   >
+          <Typography variant="h5" className={classes.title} component={Link} to={"/"} >
             Shoply
           </Typography>
           <div className={classes.cartWrapper}>
             <img className={classes.image} src={cart} alt="cart" />
             <div className={classes.cart}>Cart</div>
-            <div className={classes.quantity}>1</div>
+            <div className={classes.quantity}>{Object.values(cartItems).reduce((a,b) => a+b.quantity,0) || 0}</div>
           </div>
           
         </Toolbar>

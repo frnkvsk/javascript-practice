@@ -7,26 +7,23 @@ export const shoplyInventorySlice = createSlice({
   initialState: products,
   reducers: {
     addInventoryItem: (state, action) => {
-      // const index = state.data.findIndex(e => e.id === action.payload.id);
-      // if(index > -1) {
-      //   state.data[index].quantity = action.payload.quantity;
-      // } else {
-      //   // functionality to add a new product not implemented yet
-      //   // state.data.push({
-      //   //   id: action.payload.id,
-      //   //   name: action.payload.name,
-      //   //   description: action.payload.description,
-      //   //   image_url: action.payload.image_url,
-      //   //   quantity: action.payload.quantity,
-      //   // })
-      // }
+      if(state[action.payload.id].quantity !== undefined) {
+        // item exists in inventory
+        // change inventory quantity (added item/items to cart)
+        state[action.payload.id].quantity += action.payload.quantity;
+      }
     },
     removeInventoryItem: (state, action) => {
-      // exact same functionality as addInventoryItem
+      console.log('shoplyInventorySlice',action)
+      console.log('state=',state[action.payload.id].quantity)
       // const index = state.data.findIndex(e => e.id === action.payload.id);
-      // if(index > -1) {
-      //   state.data[index].quantity = action.payload.quantity;
-      // }
+      // console.log('shoplyInventorySlice removeInventoryItem index=',index,' action=',action)
+      if(state[action.payload.id].quantity) {
+        // item exists in inventory
+        // change inventory quantity (added item/items to cart)
+        state[action.payload.id].quantity -= action.payload.quantity;
+      }
+      console.log('after quantity',state[action.payload.id].quantity)
     },
   }
 });
