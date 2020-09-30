@@ -143,7 +143,6 @@ export default function EachProduct({id}) {
   
   return (  
     <div className={classes.root}>
-      <h1>EachProduct</h1>
       <img className={classes.image} src={item.image_url} alt={item.name} />
       <div className={classes.descriptionWrapper}>
 

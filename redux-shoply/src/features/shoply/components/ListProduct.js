@@ -21,12 +21,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
-    padding: '10px 0 10px 0',
-    
+    padding: '10px 0 10px 0',    
     flexWrap: 'wrap',
     boxShadow: '0 1px 1px rgba(0,0,0,0.3)',
     borderTop: '.5px solid #eeeeee',
     borderBottom: '.5px solid #eeeeee',
+  },
+  diplayWrapper: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    width: '440px',
   },
   descriptionWrapper: {
     display: 'flex',
@@ -36,8 +40,7 @@ const useStyles = makeStyles((theme) => ({
     margin: '10px',
     padding: '10px',
     backgroundColor: '#ffffff',
-  },
-  
+  },  
   image: {
     width: '200px',  
     cursor: 'pointer',  
@@ -48,34 +51,27 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'capitalize',
     marginBottom: '10px',
     cursor: 'pointer',
-  },
-  
-  
+  }, 
   priceWrapper: {
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     fontSize: '22px',
     fontWeight: '600',
-    // border: '1px solid yellow',
   },
   icon: {
-    // display: 'flex',
-    // alignSelf: 'flex-start',
     width: '8px',
     fontSize: '14px',
     paddingTop: '4px',
-    // border: '.5px solid pink',
   },
-  price: {
-    // alignSelf: 'flex-start',
-    // padding: '0',
-  },
-  description: {
-    fontSize: '18px',
-    fontWeight: '500',
-  },
-  
+  [theme.breakpoints.down('md')]: {
+    diplayWrapper: {
+      justifyContent: 'center',
+    },
+    descriptionWrapper: {
+      alignItems: 'center',
+    },
+  }
   
 }));
 
@@ -99,23 +95,22 @@ export default function ListProduct({id}) {
   
   return (  
     <div className={classes.root}>
-      <h1>ListProduct</h1>
-      <img 
-        className={classes.image} 
-        src={item.image_url} 
-        alt={item.name} 
-        onClick={handleClick}/>
+      <div className={classes.diplayWrapper}>
+        <img 
+          className={classes.image} 
+          src={item.image_url} 
+          alt={item.name} 
+          onClick={handleClick}/>
+      </div>      
       <div className={classes.descriptionWrapper}>
-
-      <div 
-        className={classes.title} 
-        onClick={handleClick}>
-        <label>{item.name}</label>
-      </div>
-
-      <div className={classes.priceWrapper}>
-        <div className={classes.icon}>$</div><div className={classes.price}>{item.price}</div>
-      </div> 
+        <div 
+          className={classes.title} 
+          onClick={handleClick}>
+          <label>{item.name}</label>
+        </div>
+        <div className={classes.priceWrapper}>
+          <div className={classes.icon}>$</div><div className={classes.price}>{item.price}</div>
+        </div> 
       </div>          
     </div>    
   );
