@@ -7,7 +7,6 @@ import { makeStyles, Button } from '@material-ui/core';
 import { 
   addCartItem, 
   removeCartItem,
-  // persistDataToLocalStorage,
   selectShoplyCart,
 } from '../shoplyCartSlice'; 
 import { 
@@ -61,7 +60,10 @@ const useStyles = makeStyles((theme) => ({
   btn: {
     width: '40px',
     height: '25px',    
-  },  
+  },
+  quantity: {
+    fontSize: '13px',
+  }, 
 }));
 
 export default function DropDownQuantityList({id}) {
@@ -72,7 +74,7 @@ export default function DropDownQuantityList({id}) {
   let item = {};
   const cartItems = useSelector(selectShoplyCart);
   const inventoryItems = useSelector(selectShoplyInventory);
-  // const inventoryItemQuantity = inventoryItems[id].quantity;
+  const inventoryItemQuantity = inventoryItems[id].quantity;
   if(cartItems[id]) {
     item = cartItems[id];    
   } else if(inventoryItems[id]) {
@@ -82,36 +84,39 @@ export default function DropDownQuantityList({id}) {
   const handleVisibilty = () => {
     setVisible(visible === 'block' ? 'none' : 'block');
   }
-  const handleQuantityChange = (Q) => {
+  const handleQuantityChange = (Q) => {    
     if(Q === 'ten') {
       setVisible10('block');
       setVisible('none');
       Q = quantity;
     } else {
       setVisible10('none');
+      // limit quantity to what is currently in stock
+      Q = Math.min(Q, inventoryItemQuantity + cartItems[id].quantity);
     }
-    if(Q < quantity) {
+    console.log('Q',Q, inventoryItemQuantity, quantity, cartItems[id].quantity)
+    if(Q < cartItems[id].quantity) {
       // increment inventory item quantity
       dispatch(addInventoryItem({
         id: id,
-        quantity: quantity - Q,
+        quantity: cartItems[id].quantity - Q,
       }));
       // decrement cart item quantity
       dispatch(removeCartItem({
         id: id,
-        quantity: quantity - Q,
+        quantity: cartItems[id].quantity - Q,
       }));
 
-    } else if(Q > quantity) {
+    } else if(Q > cartItems[id].quantity) {
       // decrement inventory item quantity
       dispatch(removeInventoryItem({
         id: id,
-        quantity: Q - quantity,
+        quantity: Q - cartItems[id].quantity,
       }));
       // increment cart item quantity
       dispatch(addCartItem({
         id: id,
-        quantity: Q - quantity,
+        quantity: Q - cartItems[id].quantity,
       }));
     }
     setQuantity(Q);
@@ -148,8 +153,8 @@ export default function DropDownQuantityList({id}) {
         <div className={classes.link} onClick={() => handleQuantityChange(8)} >8</div>
         <div className={classes.link} onClick={() => handleQuantityChange(9)} >9</div>
         <div className={classes.link} onClick={() => handleQuantityChange('ten')} >10+</div>
-      </div>      
+      </div> 
+      <label className={classes.quantity}>{inventoryItemQuantity ? `In Stock: ${inventoryItemQuantity} items left.` : `Out of stock.`}</label>     
     </div>     
-  );
-  
+  );  
 }

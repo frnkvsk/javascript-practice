@@ -5,21 +5,52 @@ import Navbar from './features/shoply/components/Navbar';
 import ProductsList from './features/shoply/pages/ProductsList';
 import ProductItem from './features/shoply/pages/ProductItem';
 import ShoppingCart from './features/shoply/pages/ShoppingCart'
+import { makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  main: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    [theme.breakpoints.down('md')]: {
+      width: '100%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: '85%'
+    },
+    [theme.breakpoints.up('xl')]: {
+      width: '75%'
+    },
+    border: '1px solid #eeeeee',
+  },
+}));
 function App() {
+  const classes = useStyles();
   return (
     <BrowserRouter>
       <Navbar />
       <Switch>
-        <Route exact path="/">
-          <ProductsList />        
-        </Route>
-        <Route exact path="/productitem/:id">
-          <ProductItem />        
-        </Route>
-        <Route exact path="/cart/:id">
-          <ShoppingCart />        
-        </Route>
-        
+        <div className={classes.root}>
+          <main className={classes.main}>
+          <Route exact path="/">
+            <ProductsList />        
+          </Route>
+          <Route exact path="/productitem/:id">
+            <ProductItem />        
+          </Route>
+          <Route exact path="/cart">
+            <ShoppingCart />        
+          </Route>
+          </main>        
+        </div>        
       </Switch>       
     </BrowserRouter>
   );

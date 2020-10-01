@@ -2,16 +2,10 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
-// import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import { 
-  // addCartItem, 
-  // removeCartItem,
-  // persistDataToLocalStorage,
   selectShoplyCart,
 } from '../shoplyCartSlice'; 
 import { 
-  // addInventoryItem, 
-  // removeInventoryItem,
   selectShoplyInventory,
 } from '../shoplyInventorySlice'; 
 
@@ -20,25 +14,33 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '90%',
+    [theme.breakpoints.down('md')]: {
+      flexDirection: 'column'
+    },
+    [theme.breakpoints.up('lg')]: {
+      flexDirection: 'row'
+    },
+    [theme.breakpoints.up('xl')]: {
+      flexDirection: 'row'
+    },    
+    width: '100%',
     padding: '10px 0 10px 0',    
     flexWrap: 'wrap',
-    boxShadow: '0 1px 1px rgba(0,0,0,0.3)',
-    borderTop: '.5px solid #eeeeee',
-    borderBottom: '.5px solid #eeeeee',
+    border: '1px solid #eeeeee',
   },
   diplayWrapper: {
     display: 'flex',
     justifyContent: 'flex-end',
-    width: '440px',
+    width: '40%',
+    paddingRight: '30px',
   },
   descriptionWrapper: {
     display: 'flex',
     flexDirection: 'column',
-    width: '440px',
+    width: '40%',
     flexWrap: 'wrap',
     margin: '10px',
-    padding: '10px',
+    paddingLeft: '30px',
     backgroundColor: '#ffffff',
   },  
   image: {
@@ -66,13 +68,15 @@ const useStyles = makeStyles((theme) => ({
   },
   [theme.breakpoints.down('md')]: {
     diplayWrapper: {
+      alignItems: 'center',
       justifyContent: 'center',
+      padding: '0',
     },
     descriptionWrapper: {
       alignItems: 'center',
+      padding: '0',
     },
-  }
-  
+  },  
 }));
 
 export default function ListProduct({id}) {
@@ -85,11 +89,8 @@ export default function ListProduct({id}) {
     item = cartItems[id];
   } else if(inventoryItems[id]) {
     item = inventoryItems[id];
-  }
-  
-  
+  }  
   const handleClick = () => {
-    // console.log('ListProduct item.id')
     history.push(`/productitem/${id}`);
   }
   
@@ -114,5 +115,4 @@ export default function ListProduct({id}) {
       </div>          
     </div>    
   );
-  
 }

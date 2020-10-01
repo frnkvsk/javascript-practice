@@ -1,8 +1,5 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-// import { selectShoplyInventory } from '../shoplyInventorySlice';
-// import { selectShoplyCart } from './shoplyCartSlice';
 import EachProduct from '../components/EachProduct';
 import { makeStyles } from '@material-ui/core';
 
@@ -14,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     width: '100%',    
   },
-
   display: {
     display: 'flex',
     flexDirection: 'column',
@@ -22,19 +18,12 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     flexWrap: 'wrap',
     marginTop: '30px',
-    [theme.breakpoints.down('xs')]: {
-      width: '70%'
-    },
-    [theme.breakpoints.up('md')]: {
-      width: '100%'
-    }
   },
 }));
 
 export default function ProductItem() {
   const classes = useStyles();
   const {id} = useParams();
-  // let products = useSelector(selectShoplyInventory);
 
   return (
     <div className={classes.root}>
@@ -43,5 +32,5 @@ export default function ProductItem() {
         <EachProduct key={id} id={id} />
       </div>
     </div>
-  )
+  );
 }

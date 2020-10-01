@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { selectShoplyCart } from '../shoplyCartSlice';
 import cart from './cart-mini4.svg';
 import { Link } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   cartWrapper: {
     position: 'relative',
     top: '-3px',
-    width: '80px',
+    width: '100px',
     height: '30px',
     fontWeight: '600',
     margin: '5px',
@@ -37,23 +38,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       border: '1px solid rgba(0,0,0,0.3)'
     },
-    // '&$focused': {
-    //   // backgroundColor: '#fff',
-    //   boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-    //   borderColor: theme.palette.primary.main,
-    // },
-
-    // border: 'none',
-    // "&:hover": {
-    //   border: '1px solid rgba(0,0,0,0.3)'
-    // },
-    // "& .MuiInput-underline:after": {
-    //   boxShadow: 'none'
-    // },
-    // border: 'none',//'0 2px 4px rgba(0,0,0,0.3)',
-    // "&:hover": {
-    //   border: '1px solid #223d75'
-    // },
   },
   image: {
     position: 'absolute',
@@ -63,8 +47,9 @@ const useStyles = makeStyles((theme) => ({
   cart: {
     position: 'absolute',
     left: '40px',
+    color: 'white',
     fontWeight: '600',
-    margin: '5px',
+    margin: '8px',
   },
   quantity: {
     position: 'absolute',
@@ -81,14 +66,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar() {
   const classes = useStyles();
   const cartItems = useSelector(selectShoplyCart);
-  // const auth = useContext(AuthContext);
-  // const handleClick = () => {
-  //   auth.setAuthState({
-  //     token: "",
-  //     userInfo: {}
-  //   });
-  // }
-  // console.log('Navbar cartItems',cartItems)
+  const quantity = Object.values(cartItems).reduce((a,b) => a+b.quantity,0) || 0;
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -96,12 +74,11 @@ export default function Navbar() {
           <Typography variant="h5" className={classes.title} component={Link} to={"/"} >
             Shoply
           </Typography>
-          <div className={classes.cartWrapper}>
+          <Button className={classes.cartWrapper} component={Link} to={"/cart/"} >
             <img className={classes.image} src={cart} alt="cart" />
             <div className={classes.cart}>Cart</div>
-            <div className={classes.quantity}>{Object.values(cartItems).reduce((a,b) => a+b.quantity,0) || 0}</div>
-          </div>
-          
+            <div className={classes.quantity}>{quantity}</div>
+          </Button>          
         </Toolbar>
       </AppBar>
     </div>
