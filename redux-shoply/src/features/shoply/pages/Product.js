@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import EachProduct from '../components/EachProduct';
+import DescribedProduct from '../components/DescribedProduct';
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +29,7 @@ export default function ProductItem() {
     <div className={classes.root}>
       <h1>ProductItem</h1>
       <div className={classes.display}>
-        <EachProduct key={id} id={id} />
+        <DescribedProduct key={id} id={id} />
       </div>
     </div>
   );

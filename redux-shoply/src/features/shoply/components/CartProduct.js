@@ -4,7 +4,7 @@ import {
 } from 'react-redux';
 import { makeStyles } from '@material-ui/core';
 import { 
-  selectShoplyCart,
+  selectShoplyCart,  
 } from '../shoplyCartSlice'; 
 import { 
   selectShoplyInventory,

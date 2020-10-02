@@ -36,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: '1',
   }, 
   linkWrapper: {
-    position: 'fixed',
+    position: 'absolute',
     boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
-    zIndex: '2400',
+    zIndex: '100',
   },
   link: {
     opacity: '1',
@@ -94,7 +94,7 @@ export default function DropDownQuantityList({id}) {
       // limit quantity to what is currently in stock
       Q = Math.min(Q, inventoryItemQuantity + cartItems[id].quantity);
     }
-    console.log('Q',Q, inventoryItemQuantity, quantity, cartItems[id].quantity)
+    
     if(Q < cartItems[id].quantity) {
       // increment inventory item quantity
       dispatch(addInventoryItem({
@@ -123,8 +123,12 @@ export default function DropDownQuantityList({id}) {
     setVisible('none');
   }
 
+  const handleMouseLeave = () => {
+    setVisible('none');
+  }
+
   return (  
-    <div className={classes.dropdown}>
+    <div className={classes.dropdown} onMouseLeave={handleMouseLeave}>
       <div className={classes.dropBtn} onClick={handleVisibilty}>Qty: {quantity}</div>
       <div className={classes.update} style={{display: visible10}}>
         <input

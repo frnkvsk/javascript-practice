@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const getData = () => {
-  return JSON.parse(localStorage.getItem('shoply_cart')) || {}
+  let data = localStorage.getItem('shoply_cart');
+  return data ? JSON.parse(data) : {};
 }
 
 export const shoplyCartSlice = createSlice({
@@ -21,20 +22,17 @@ export const shoplyCartSlice = createSlice({
           price: action.payload.price,
         };
       }
-      
+      localStorage.setItem("shoply_cart", JSON.stringify(state));
     },
     removeCartItem: (state, action) => {
-      if(state[action.payload.id]) {   
-        console.log('shoplyCartSlice removeCartItem ',state[action.payload.id].quantity , action.payload.quantity)     
+      if(state[action.payload.id]) {    
         if(state[action.payload.id].quantity > action.payload.quantity) {
           state[action.payload.id].quantity -= action.payload.quantity;
         } else {
           delete state[action.payload.id];
         }        
       } 
-    },
-    persistDataToLocalStorage: (state) => {
-      localStorage.setItem("shoply_cart", JSON.stringify(state.data) || "");
+      localStorage.setItem("shoply_cart", JSON.stringify(state));
     },
   }
 });
@@ -42,7 +40,7 @@ export const shoplyCartSlice = createSlice({
 export const {
   addCartItem,
   removeCartItem,
-  persistDataToLocalStorage,
+  // persistDataToLocalStorage,
 } = shoplyCartSlice.actions;
 
 export const selectShoplyCart = state => state.shoply_cart;

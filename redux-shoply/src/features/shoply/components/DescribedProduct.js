@@ -85,29 +85,24 @@ export default function EachProduct({id}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();  
-  let item = {};
-  const inventoryItems = useSelector(selectShoplyInventory);
+  let inventoryItems = useSelector(selectShoplyInventory);
   const [quantity, setQuantity] = useState(1);
-  item = inventoryItems[id];  
+  let item = inventoryItems[id]; 
   const handleAddItem = (e) => {
     e.preventDefault();
-    dispatch(removeInventoryItem({
-      id: id,
-      quantity: quantity,
-    }));
-
-    // add cart item
-    dispatch(addCartItem({      
+    const newItem = {
       ...item,
-      id: id,
       quantity: quantity,
-    }));
+      id: id,
+    }
+    dispatch(removeInventoryItem(newItem));
+    // add cart item
+    dispatch(addCartItem(newItem));
     setQuantity(1);
     history.push(`/cart/`);
   }
-
   const handleQuantityChange = (e) => {
-    setQuantity(+e.target.value)
+    setQuantity(+e.target.value);    
   }
   
   return (  

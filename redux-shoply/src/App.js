@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navbar from './features/shoply/components/Navbar'; 
-// import { ShoplyList } from './features/shoply/components/ShoplyList';
 import ProductsList from './features/shoply/pages/ProductsList';
-import ProductItem from './features/shoply/pages/ProductItem';
+import Product from './features/shoply/pages/Product';
 import ShoppingCart from './features/shoply/pages/ShoppingCart'
 import { makeStyles } from '@material-ui/core';
 
@@ -34,24 +33,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 function App() {
   const classes = useStyles();
+
   return (
     <BrowserRouter>
       <Navbar />
-      <Switch>
-        <div className={classes.root}>
-          <main className={classes.main}>
+      <div className={classes.root}>
+        <main className={classes.main}>
+        <Switch>        
           <Route exact path="/">
             <ProductsList />        
           </Route>
           <Route exact path="/productitem/:id">
-            <ProductItem />        
+            <Product />        
           </Route>
           <Route exact path="/cart">
             <ShoppingCart />        
-          </Route>
-          </main>        
-        </div>        
-      </Switch>       
+          </Route>                 
+        </Switch> 
+        </main>        
+      </div>       
     </BrowserRouter>
   );
 }
