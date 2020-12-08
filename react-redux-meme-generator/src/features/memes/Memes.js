@@ -37,10 +37,16 @@ export function Memes() {
     <div className={classes.root}>
       <NewMemeForm />
       <div className={classes.display}> 
-        {memes.editData.hasOwnProperty('id') ? <MemeItem key={memes.editData.id} id={memes.editData.id} /> :       
-        memes.hasOwnProperty('data') && memes.data.map(meme => (
-          <MemeItem key={meme.id} id={meme.id} />
-        ))}
+        { 
+
+          memes.editData.hasOwnProperty('id') ? 
+
+          <MemeItem key={memes.editData.id} id={memes.editData.id} /> :    
+
+          ( memes.hasOwnProperty('data') && 
+            memes.data.map(meme => <MemeItem key={meme.id} id={meme.id} />) )
+
+        }
       </div>      
     </div>
   );
